@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Chiara - Gestione Clienti</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-dark: #5C3D2E;
+    --brown-mid: #7E5A45;
+    --cream: #F5EDE4;
+    --cream-light: #FAF7F3;
+    --rose: #D4A0A0;
+    --rose-light: #F0D5D5;
+    --sage: #8FA87A;
+    --sage-light: #C5D9B0;
+    --text-dark: #4A2E1F;
+    --text-mid: #7E5A45;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* Header */
+  .header {
+    background: var(--brown-dark);
+    color: var(--cream);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .header p {
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  /* Tab Navigation */
+  .tabs {
+    display: flex;
+    background: white;
+    border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 14px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    color: var(--brown-dark);
+    border-bottom-color: var(--rose);
+  }
+
+  /* Content */
+  .content {
+    padding: 16px;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  /* Client Cards */
+  .client-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(92, 61, 46, 0.08);
+  }
+
+  .client-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .client-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .client-dog {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+  }
+
+  .client-badge {
+    background: var(--sage-light);
+    color: var(--sage);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .client-stats {
+    display: flex;
+    gap: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(92, 61, 46, 0.08);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-mid);
+  }
+
+  /* Section Title */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin: 20px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Diary Entry */
+  .diary-entry {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--sage);
+  }
+
+  .diary-entry.warning {
+    border-left-color: #FFA726;
+  }
+
+  .diary-entry.issue {
+    border-left-color: #EF5350;
+  }
+
+  .diary-entry.new {
+    background: #FFF8E1;
+  }
+
+  .diary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .diary-date {
+    font-size: 0.75rem;
+    color: var(--text-mid);
+  }
+
+  .diary-type {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .diary-type.success { background: var(--sage-light); color: #558B2F; }
+  .diary-type.doubt { background: #FFE0B2; color: #E65100; }
+  .diary-type.problem { background: #FFCDD2; color: #C62828; }
+  .diary-type.new-entry { background: #FFEB3B; color: #F57F17; }
+
+  .diary-text {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    line-height: 1.5;
+  }
+
+  .diary-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .diary-action {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .diary-action.primary {
+    background: var(--rose);
+    color: var(--brown-dark);
+  }
+
+  .diary-action.secondary {
+    background: var(--cream);
+    color: var(--text-mid);
+  }
+
+  /* Badge Grid */
+  .badge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .badge-item {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .badge-emoji {
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+
+  .badge-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .badge-desc {
+    font-size: 0.7rem;
+    color: var(--text-mid);
+  }
+
+  .badge-assign {
+    margin-top: 8px;
+    font-size: 0.7rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    background: var(--sage);
+    color: white;
+    cursor: pointer;
+  }
+
+  /* Lesson Notes */
+  .lesson-card {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+
+  .lesson-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .lesson-date {
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .lesson-time {
+    font-size: 0.8rem;
+    color: var(--rose);
+  }
+
+  .lesson-notes {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .lesson-homework {
+    margin-top: 10px;
+    padding: 10px;
+    background: var(--cream-light);
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
+
+  .lesson-homework strong {
+    color: var(--brown-dark);
+  }
+
+  /* Goals */
+  .goal-item {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .goal-icon {
+    font-size: 1.5rem;
+  }
+
+  .goal-text {
+    flex: 1;
+  }
+
+  .goal-title {
+    font-weight: 600;
+    color: var(--brown-dark);
+    font-size: 0.9rem;
+  }
+
+  .goal-status {
+    font-size: 0.75rem;
+    color: var(--text-mid);
+    margin-top: 4px;
+  }
+
+  /* Progress Bar */
+  .progress-container {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .progress-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--brown-dark);
+  }
+
+  .progress-percent {
+    font-size: 0.85rem;
+    color: var(--sage);
+    font-weight: 600;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--cream);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--sage-light));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-badges {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .progress-badge {
+    font-size: 1.2rem;
+    opacity: 0.3;
+  }
+
+  .progress-badge.earned {
+    opacity: 1;
+  }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    border-top: 1px solid rgba(92, 61, 46, 0.1);
+    padding: 8px 0;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    color: var(--text-mid);
+    text-decoration: none;
+    font-size: 0.7rem;
+  }
+
+  .nav-item.active {
+    color: var(--rose);
+  }
+
+  .nav-icon {
+    font-size: 1.3rem;
+    margin-bottom: 2px;
+  }
+
+  /* Add Note Button */
+  .add-note-btn {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--rose);
+    color: var(--brown-dark);
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212, 160, 160, 0.4);
+  }
+
+  /* Client Detail View */
+  .client-detail-header {
+    background: var(--brown-dark);
+    color: var(--cream);
+    padding: 20px;
+    margin: -16px -16px 16px;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--cream);
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .detail-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .detail-dog {
+    opacity: 0.8;
+    margin-top: 4px;
+  }
+
+  .detail-tabs {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .detail-tab {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: none;
+    color: var(--cream);
+    cursor: pointer;
+  }
+
+  .detail-tab.active {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: var(--brown-dark);
+  }
+
+  /* Demo Banner */
+  .demo-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">
+  🎭 DEMO - WebApp Gestione Clienti per Chiara
+</div>
+
+<!-- Header -->
+<header class="header">
+  <h1>I Miei Clienti</h1>
+  <p>Gestisci percorsi e progressi</p>
+</header>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('clienti')">👥 Clienti</button>
+  <button class="tab" onclick="showTab('oggi')">📅 Oggi</button>
+  <button class="tab" onclick="showTab('badge')">🏆 Badge</button>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- TAB: Clienti -->
+  <div id="tab-clienti" class="tab-content active">
+
+    <!-- Cliente 1: Solo visualizzazione Chiara (hardcoded) -->
+    <div class="client-card" onclick="showClient('luna')">
+      <div class="client-header">
+        <div>
+          <div class="client-name">Giulia Ferraro</div>
+          <div class="client-dog">🐕 Luna - Labrador, 2 anni</div>
+        </div>
+        <span class="client-badge">In percorso</span>
+      </div>
+      <div class="client-stats">
+        <div class="stat">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Lezioni</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Badge</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">2</div>
+          <div class="stat-label">Nuovi diari</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cliente 2: Ambivalente (visibile anche al cliente) -->
+    <div class="client-card" onclick="showClient('rex')" style="border: 2px solid var(--rose);">
+      <div class="client-header">
+        <div>
+          <div class="client-name">Mario Bianchi</div>
+          <div class="client-dog">🐕 Rex - Pastore Tedesco, 3 anni</div>
+        </div>
+        <span class="client-badge" style="background: var(--rose-light); color: var(--rose);">Demo condivisa</span>
+      </div>
+      <div class="client-stats">
+        <div class="stat">
+          <div class="stat-value">8</div>
+          <div class="stat-label">Lezioni</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Badge</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">1</div>
+          <div class="stat-label">Nuovo diario</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB: Oggi -->
+  <div id="tab-oggi" class="tab-content">
+    <h3 class="section-title">📅 Lezioni di Oggi</h3>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">Mario Bianchi - Rex</span>
+        <span class="lesson-time">10:00</span>
+      </div>
+      <div class="lesson-notes">Proseguire con esercizi di focus. Provare passeggiata in zona più trafficata.</div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">Giulia Ferraro - Luna</span>
+        <span class="lesson-time">15:00</span>
+      </div>
+      <div class="lesson-notes">Prima lezione di socializzazione con altri cani. Portare premi alto valore.</div>
+    </div>
+
+    <h3 class="section-title">🔔 Nuove dal Diario</h3>
+
+    <div class="diary-entry new">
+      <div class="diary-header">
+        <span class="diary-date">Mario B. - Rex • Oggi, 08:32</span>
+        <span class="diary-type new-entry">NUOVO</span>
+      </div>
+      <div class="diary-text">
+        "Stamattina abbiamo incontrato il cane del vicino. Rex ha abbaiato ma si è calmato dopo che gli ho dato il comando. Piccolo progresso?"
+      </div>
+      <div class="diary-actions">
+        <button class="diary-action primary">💬 Rispondi</button>
+        <button class="diary-action secondary">🏆 Assegna badge</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB: Badge Library -->
+  <div id="tab-badge" class="tab-content">
+    <h3 class="section-title">🏆 Libreria Badge</h3>
+    <p style="font-size: 0.8rem; color: var(--text-mid); margin-bottom: 16px;">
+      Seleziona un cliente, poi assegna i badge conquistati
+    </p>
+
+    <h4 style="font-size: 0.85rem; color: var(--brown-dark); margin: 16px 0 10px;">Gestione Reattività</h4>
+    <div class="badge-grid">
+      <div class="badge-item">
+        <div class="badge-emoji">🌲</div>
+        <div class="badge-name">Esploratore Bosco</div>
+        <div class="badge-desc">Passeggiata tranquilla nel verde</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🚶</div>
+        <div class="badge-name">Zona Pedonale</div>
+        <div class="badge-desc">Passeggiata in area pedonale</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🏙️</div>
+        <div class="badge-name">Cittadino</div>
+        <div class="badge-desc">Passeggiata in centro città</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🎪</div>
+        <div class="badge-name">Festa di Paese</div>
+        <div class="badge-desc">Evento affollato superato</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+    </div>
+
+    <h4 style="font-size: 0.85rem; color: var(--brown-dark); margin: 16px 0 10px;">Socializzazione</h4>
+    <div class="badge-grid">
+      <div class="badge-item">
+        <div class="badge-emoji">👀</div>
+        <div class="badge-name">Osservatore</div>
+        <div class="badge-desc">Ignora un cane a distanza</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🤝</div>
+        <div class="badge-name">Primo Saluto</div>
+        <div class="badge-desc">Saluto controllato</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🎾</div>
+        <div class="badge-name">Compagno di Giochi</div>
+        <div class="badge-desc">Gioco con un altro cane</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🐕‍🦺</div>
+        <div class="badge-name">Sociale</div>
+        <div class="badge-desc">Area cani senza problemi</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+    </div>
+
+    <h4 style="font-size: 0.85rem; color: var(--brown-dark); margin: 16px 0 10px;">Obbedienza Base</h4>
+    <div class="badge-grid">
+      <div class="badge-item">
+        <div class="badge-emoji">🎯</div>
+        <div class="badge-name">Focus</div>
+        <div class="badge-desc">Attenzione al comando</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🛑</div>
+        <div class="badge-name">Stop!</div>
+        <div class="badge-desc">Fermo su comando</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🔙</div>
+        <div class="badge-name">Ritorno</div>
+        <div class="badge-desc">Richiamo affidabile</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🦮</div>
+        <div class="badge-name">Al Passo</div>
+        <div class="badge-desc">Cammina senza tirare</div>
+        <button class="badge-assign">+ Assegna</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Client Detail: Rex (Mario) - Demo condivisa -->
+<div id="client-rex" style="display: none;">
+  <div class="content">
+    <div class="client-detail-header">
+      <button class="back-btn" onclick="hideClient()">← Torna ai clienti</button>
+      <div class="detail-name">Mario Bianchi</div>
+      <div class="detail-dog">🐕 Rex - Pastore Tedesco, 3 anni</div>
+      <div class="detail-tabs">
+        <button class="detail-tab active" onclick="showDetailTab('rex', 'progressi')">Progressi</button>
+        <button class="detail-tab" onclick="showDetailTab('rex', 'diario')">Diario</button>
+        <button class="detail-tab" onclick="showDetailTab('rex', 'lezioni')">Lezioni</button>
+        <button class="detail-tab" onclick="showDetailTab('rex', 'obiettivi')">Obiettivi</button>
+      </div>
+    </div>
+
+    <!-- Progressi -->
+    <div id="rex-progressi" class="detail-content">
+      <div class="progress-container">
+        <div class="progress-header">
+          <span class="progress-title">Percorso Reattività</span>
+          <span class="progress-percent">60%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 60%;"></div>
+        </div>
+        <div class="progress-badges">
+          <span class="progress-badge earned">🌲</span>
+          <span class="progress-badge earned">🚶</span>
+          <span class="progress-badge earned">🏙️</span>
+          <span class="progress-badge">🎪</span>
+          <span class="progress-badge">🎡</span>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-header">
+          <span class="progress-title">Socializzazione</span>
+          <span class="progress-percent">50%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 50%;"></div>
+        </div>
+        <div class="progress-badges">
+          <span class="progress-badge earned">👀</span>
+          <span class="progress-badge earned">🤝</span>
+          <span class="progress-badge">🎾</span>
+          <span class="progress-badge">🐕‍🦺</span>
+        </div>
+      </div>
+
+      <h3 class="section-title">🏆 Badge Conquistati</h3>
+      <div class="badge-grid">
+        <div class="badge-item">
+          <div class="badge-emoji">🌲</div>
+          <div class="badge-name">Esploratore Bosco</div>
+          <div class="badge-desc">15 Gen 2026</div>
+        </div>
+        <div class="badge-item">
+          <div class="badge-emoji">🚶</div>
+          <div class="badge-name">Zona Pedonale</div>
+          <div class="badge-desc">22 Gen 2026</div>
+        </div>
+        <div class="badge-item">
+          <div class="badge-emoji">🏙️</div>
+          <div class="badge-name">Cittadino</div>
+          <div class="badge-desc">1 Feb 2026</div>
+        </div>
+        <div class="badge-item">
+          <div class="badge-emoji">👀</div>
+          <div class="badge-name">Osservatore</div>
+          <div class="badge-desc">18 Gen 2026</div>
+        </div>
+        <div class="badge-item">
+          <div class="badge-emoji">🤝</div>
+          <div class="badge-name">Primo Saluto</div>
+          <div class="badge-desc">5 Feb 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diario -->
+    <div id="rex-diario" class="detail-content" style="display: none;">
+      <h3 class="section-title">📝 Diario di Mario</h3>
+
+      <div class="diary-entry new">
+        <div class="diary-header">
+          <span class="diary-date">Oggi, 08:32</span>
+          <span class="diary-type new-entry">NUOVO</span>
+        </div>
+        <div class="diary-text">
+          Stamattina abbiamo incontrato il cane del vicino. Rex ha abbaiato ma si è calmato dopo che gli ho dato il comando. Piccolo progresso?
+        </div>
+        <div class="diary-actions">
+          <button class="diary-action primary">💬 Rispondi</button>
+          <button class="diary-action secondary">🏆 Assegna badge</button>
+        </div>
+      </div>
+
+      <div class="diary-entry">
+        <div class="diary-header">
+          <span class="diary-date">5 Feb 2026</span>
+          <span class="diary-type success">SUCCESSO</span>
+        </div>
+        <div class="diary-text">
+          Incredibile! Rex ha salutato il cane della mia amica senza problemi. Erano entrambi al guinzaglio e hanno annusato tranquilli. Sono commossa!
+        </div>
+      </div>
+
+      <div class="diary-entry warning">
+        <div class="diary-header">
+          <span class="diary-date">2 Feb 2026</span>
+          <span class="diary-type doubt">DUBBIO</span>
+        </div>
+        <div class="diary-text">
+          Passeggiata in centro. Rex era un po' agitato ma non ha tirato. Però ringhiava sottovoce quando passavano cani. È normale in questa fase?
+        </div>
+      </div>
+
+      <div class="diary-entry issue">
+        <div class="diary-header">
+          <span class="diary-date">28 Gen 2026</span>
+          <span class="diary-type problem">EPISODIO</span>
+        </div>
+        <div class="diary-text">
+          Disastro al parco. Un cane è arrivato di corsa e Rex è impazzito. Ho dovuto trascinarlo via. Mi sono sentita in colpa.
+        </div>
+      </div>
+
+      <div class="diary-entry">
+        <div class="diary-header">
+          <span class="diary-date">22 Gen 2026</span>
+          <span class="diary-type success">SUCCESSO</span>
+        </div>
+        <div class="diary-text">
+          Prima passeggiata nella zona pedonale del centro! Rex era attento ma controllato. Siamo passati davanti a 3 cani e non ha reagito!
+        </div>
+      </div>
+    </div>
+
+    <!-- Lezioni -->
+    <div id="rex-lezioni" class="detail-content" style="display: none;">
+      <h3 class="section-title">📚 Note Lezioni</h3>
+
+      <div class="lesson-card">
+        <div class="lesson-header">
+          <span class="lesson-date">5 Feb 2026</span>
+          <span class="lesson-time">Lezione #8</span>
+        </div>
+        <div class="lesson-notes">
+          Ottimi progressi nella socializzazione! Rex ha mostrato un saluto controllato con il cane di prova. Mantiene il focus sul proprietario anche in presenza di altri cani.
+        </div>
+        <div class="lesson-homework">
+          <strong>📋 Compiti:</strong> Praticare il "guarda me" quando si vedono cani a distanza. Iniziare con 10 metri, poi avvicinarsi gradualmente.
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <div class="lesson-header">
+          <span class="lesson-date">29 Gen 2026</span>
+          <span class="lesson-time">Lezione #7</span>
+        </div>
+        <div class="lesson-notes">
+          Lavoro sul focus in ambiente urbano. Rex risponde bene ai comandi anche con distrazioni moderate. Da migliorare la gestione quando i cani appaiono all'improvviso.
+        </div>
+        <div class="lesson-homework">
+          <strong>📋 Compiti:</strong> Esercizi di desensibilizzazione con video di cani che abbaiano. 2 sessioni da 5 minuti al giorno.
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <div class="lesson-header">
+          <span class="lesson-date">22 Gen 2026</span>
+          <span class="lesson-time">Lezione #6</span>
+        </div>
+        <div class="lesson-notes">
+          Passeggiata in zona pedonale. Rex ha gestito bene lo stress. Qualche momento di tensione ma recupera velocemente. Il proprietario sta migliorando nella lettura dei segnali.
+        </div>
+        <div class="lesson-homework">
+          <strong>📋 Compiti:</strong> Almeno 3 passeggiate in zona pedonale questa settimana. Portare sempre premi alto valore.
+        </div>
+      </div>
+    </div>
+
+    <!-- Obiettivi -->
+    <div id="rex-obiettivi" class="detail-content" style="display: none;">
+      <h3 class="section-title">🎯 Obiettivi di Mario</h3>
+      <p style="font-size: 0.8rem; color: var(--text-mid); margin-bottom: 16px;">
+        Cosa vorrebbe ottenere con Rex
+      </p>
+
+      <div class="goal-item">
+        <div class="goal-icon">☕</div>
+        <div class="goal-text">
+          <div class="goal-title">"Portarlo al bar con me"</div>
+          <div class="goal-status">In lavorazione - Percorso reattività al 60%</div>
+        </div>
+      </div>
+
+      <div class="goal-item">
+        <div class="goal-icon">🐕</div>
+        <div class="goal-text">
+          <div class="goal-title">"Farlo giocare con altri cani"</div>
+          <div class="goal-status">In lavorazione - Socializzazione al 50%</div>
+        </div>
+      </div>
+
+      <div class="goal-item">
+        <div class="goal-icon">🏔️</div>
+        <div class="goal-text">
+          <div class="goal-title">"Fare trekking insieme"</div>
+          <div class="goal-status">Pronto! - Ha già il badge Esploratore</div>
+        </div>
+      </div>
+
+      <div class="goal-item">
+        <div class="goal-icon">🏖️</div>
+        <div class="goal-text">
+          <div class="goal-title">"Portarlo in spiaggia d'estate"</div>
+          <div class="goal-status">Da iniziare - Richiede badge Festa di Paese</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Client Detail: Luna (Giulia) - Solo Chiara -->
+<div id="client-luna" style="display: none;">
+  <div class="content">
+    <div class="client-detail-header">
+      <button class="back-btn" onclick="hideClient()">← Torna ai clienti</button>
+      <div class="detail-name">Giulia Ferraro</div>
+      <div class="detail-dog">🐕 Luna - Labrador, 2 anni</div>
+      <div style="background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; margin-top: 12px; font-size: 0.8rem;">
+        ℹ️ Questo cliente non ha ancora la WebApp attiva
+      </div>
+    </div>
+
+    <h3 class="section-title">📚 Note Lezioni</h3>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">3 Feb 2026</span>
+        <span class="lesson-time">Lezione #5</span>
+      </div>
+      <div class="lesson-notes">
+        Luna mostra ansia da separazione. Abbaia quando Giulia esce dalla stanza. Iniziato protocollo di desensibilizzazione graduale.
+      </div>
+      <div class="lesson-homework">
+        <strong>📋 Compiti:</strong> Uscite brevi dalla stanza (10 sec → 30 sec → 1 min). Premiare la calma. Niente saluti esagerati.
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">27 Gen 2026</span>
+        <span class="lesson-time">Lezione #4</span>
+      </div>
+      <div class="lesson-notes">
+        Lavoro sul "resta" con durata. Luna riesce a stare ferma 30 secondi. Tende a seguire Giulia ovunque in casa.
+      </div>
+    </div>
+
+    <h3 class="section-title">🏆 Badge Conquistati</h3>
+    <div class="badge-grid">
+      <div class="badge-item">
+        <div class="badge-emoji">🎯</div>
+        <div class="badge-name">Focus</div>
+        <div class="badge-desc">20 Gen 2026</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🛑</div>
+        <div class="badge-name">Stop!</div>
+        <div class="badge-desc">27 Gen 2026</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-emoji">🌲</div>
+        <div class="badge-name">Esploratore Bosco</div>
+        <div class="badge-desc">3 Feb 2026</div>
+      </div>
+    </div>
+
+    <h3 class="section-title">📝 Note Private</h3>
+    <div class="diary-entry" style="background: #FFF3E0;">
+      <div class="diary-text" style="font-style: italic;">
+        Giulia sembra stressata. Forse problemi personali. Luna lo percepisce. Valutare di suggerire ritmo più lento nelle prossime settimane.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<button class="add-note-btn">+</button>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <a href="#" class="nav-item active">
+    <div class="nav-icon">👥</div>
+    <div>Clienti</div>
+  </a>
+  <a href="#" class="nav-item">
+    <div class="nav-icon">📅</div>
+    <div>Calendario</div>
+  </a>
+  <a href="#" class="nav-item">
+    <div class="nav-icon">🔔</div>
+    <div>Notifiche</div>
+  </a>
+  <a href="#" class="nav-item">
+    <div class="nav-icon">⚙️</div>
+    <div>Impostazioni</div>
+  </a>
+</nav>
+
+<script>
+function showTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+  // Show selected
+  document.getElementById('tab-' + tabName).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showClient(clientId) {
+  document.querySelector('.header').style.display = 'none';
+  document.querySelector('.tabs').style.display = 'none';
+  document.querySelector('.content').style.display = 'none';
+  document.querySelector('.add-note-btn').style.display = 'none';
+  document.getElementById('client-' + clientId).style.display = 'block';
+}
+
+function hideClient() {
+  document.querySelectorAll('[id^="client-"]').forEach(c => c.style.display = 'none');
+  document.querySelector('.header').style.display = 'block';
+  document.querySelector('.tabs').style.display = 'flex';
+  document.querySelector('.content').style.display = 'block';
+  document.querySelector('.add-note-btn').style.display = 'block';
+}
+
+function showDetailTab(client, tab) {
+  // Update tab buttons
+  document.querySelectorAll(`#client-${client} .detail-tab`).forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+
+  // Show content
+  document.querySelectorAll(`#client-${client} .detail-content`).forEach(c => c.style.display = 'none');
+  document.getElementById(`${client}-${tab}`).style.display = 'block';
+}
+</script>
+
+</body>
+</html>

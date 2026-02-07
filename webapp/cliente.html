@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Il Percorso di Rex</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-dark: #5C3D2E;
+    --brown-mid: #7E5A45;
+    --cream: #F5EDE4;
+    --cream-light: #FAF7F3;
+    --rose: #D4A0A0;
+    --rose-light: #F0D5D5;
+    --sage: #8FA87A;
+    --sage-light: #C5D9B0;
+    --text-dark: #4A2E1F;
+    --text-mid: #7E5A45;
+    --gold: #FFD700;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+
+  /* Demo Banner */
+  .demo-banner {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--brown-dark) 0%, #4A2E1F 100%);
+    color: var(--cream);
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 160, 160, 0.15) 0%, transparent 70%);
+  }
+
+  .dog-avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--cream);
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Stats Bar */
+  .stats-bar {
+    display: flex;
+    background: white;
+    margin: -20px 16px 16px;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(92, 61, 46, 0.1);
+    position: relative;
+    z-index: 10;
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid rgba(92, 61, 46, 0.1);
+  }
+
+  .stat-item:last-child {
+    border-right: none;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-mid);
+    margin-top: 2px;
+  }
+
+  /* Content */
+  .content {
+    padding: 0 16px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-link {
+    font-size: 0.8rem;
+    color: var(--rose);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* Progress Cards */
+  .progress-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(92, 61, 46, 0.06);
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .progress-title {
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .progress-percent {
+    font-size: 0.9rem;
+    color: var(--sage);
+    font-weight: 700;
+  }
+
+  .progress-bar {
+    height: 12px;
+    background: var(--cream);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), #A8D08D);
+    border-radius: 6px;
+    transition: width 0.8s ease;
+  }
+
+  .progress-badges {
+    display: flex;
+    gap: 8px;
+  }
+
+  .badge-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    position: relative;
+  }
+
+  .badge-circle.earned {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+  }
+
+  .badge-circle.next {
+    border: 2px dashed var(--rose);
+    background: white;
+  }
+
+  .badge-circle.locked {
+    opacity: 0.4;
+  }
+
+  .badge-check {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 16px;
+    height: 16px;
+    background: var(--sage);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: white;
+  }
+
+  /* Next Goal Card */
+  .next-goal {
+    background: linear-gradient(135deg, var(--rose-light) 0%, #F8E8E8 100%);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid var(--rose);
+  }
+
+  .next-goal-emoji {
+    font-size: 3rem;
+    margin-bottom: 8px;
+  }
+
+  .next-goal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 4px;
+  }
+
+  .next-goal-desc {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    margin-bottom: 12px;
+  }
+
+  .next-goal-progress {
+    font-size: 0.8rem;
+    color: var(--rose);
+    font-weight: 600;
+  }
+
+  /* Diary */
+  .diary-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .diary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .diary-date {
+    font-size: 0.8rem;
+    color: var(--text-mid);
+  }
+
+  .diary-type {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+
+  .diary-type.success { background: #E8F5E9; color: #2E7D32; }
+  .diary-type.doubt { background: #FFF3E0; color: #E65100; }
+  .diary-type.problem { background: #FFEBEE; color: #C62828; }
+
+  .diary-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-dark);
+  }
+
+  .diary-response {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--cream-light);
+    border-radius: 12px;
+    border-left: 3px solid var(--sage);
+  }
+
+  .diary-response-header {
+    font-size: 0.75rem;
+    color: var(--sage);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .diary-response-text {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+  }
+
+  /* Goals */
+  .goal-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .goal-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--cream);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .goal-content {
+    flex: 1;
+  }
+
+  .goal-title {
+    font-weight: 600;
+    color: var(--brown-dark);
+    font-size: 0.95rem;
+  }
+
+  .goal-status {
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    margin-top: 2px;
+  }
+
+  .goal-status.ready {
+    color: var(--sage);
+  }
+
+  /* Lessons */
+  .lesson-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .lesson-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .lesson-date {
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .lesson-number {
+    font-size: 0.75rem;
+    background: var(--rose-light);
+    color: var(--rose);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  .lesson-notes {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .lesson-homework {
+    background: var(--cream-light);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+
+  .lesson-homework-title {
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lesson-homework-text {
+    color: var(--text-mid);
+  }
+
+  /* Add Entry Button */
+  .add-entry-btn {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: var(--rose);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212, 160, 160, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    border-top: 1px solid rgba(92, 61, 46, 0.1);
+    padding: 8px 0;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    color: var(--text-mid);
+    text-decoration: none;
+    font-size: 0.7rem;
+  }
+
+  .nav-item.active {
+    color: var(--rose);
+  }
+
+  .nav-icon {
+    font-size: 1.3rem;
+    margin-bottom: 2px;
+  }
+
+  /* Badge Detail Modal */
+  .badge-earned-card {
+    background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+    border: 2px solid #FFD700;
+  }
+
+  .badge-earned-emoji {
+    font-size: 4rem;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.4));
+  }
+
+  .badge-earned-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .badge-earned-date {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    margin-top: 4px;
+  }
+
+  .badge-earned-desc {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* All Badges Grid */
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .badge-item {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .badge-item.earned {
+    background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+  }
+
+  .badge-item.locked {
+    opacity: 0.5;
+  }
+
+  .badge-item-emoji {
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+
+  .badge-item-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: white;
+    margin: 0 16px 16px;
+    border-radius: 12px;
+    padding: 4px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: var(--rose);
+    color: white;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">
+  🐕 DEMO - WebApp Cliente: Il Percorso di Rex (Mario Bianchi)
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="dog-avatar">🐕</div>
+  <h1>Il Percorso di Rex</h1>
+  <p>Pastore Tedesco • 3 anni</p>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-value">8</div>
+    <div class="stat-label">Lezioni</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">5</div>
+    <div class="stat-label">Badge</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">55%</div>
+    <div class="stat-label">Progresso</div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('home')">🏠 Home</button>
+  <button class="tab" onclick="showTab('badge')">🏆 Badge</button>
+  <button class="tab" onclick="showTab('diario')">📝 Diario</button>
+  <button class="tab" onclick="showTab('lezioni')">📚 Lezioni</button>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- TAB: Home -->
+  <div id="tab-home" class="tab-content active">
+
+    <!-- Next Goal -->
+    <div class="section">
+      <div class="next-goal">
+        <div class="next-goal-emoji">🏙️ → 🎪</div>
+        <div class="next-goal-title">Prossimo Obiettivo</div>
+        <div class="next-goal-desc">Passeggiata in un evento affollato</div>
+        <div class="next-goal-progress">Sei al 60% del percorso!</div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">📈 I Tuoi Progressi</h2>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-title">Gestione Reattività</span>
+          <span class="progress-percent">60%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 60%;"></div>
+        </div>
+        <div class="progress-badges">
+          <div class="badge-circle earned">🌲<span class="badge-check">✓</span></div>
+          <div class="badge-circle earned">🚶<span class="badge-check">✓</span></div>
+          <div class="badge-circle earned">🏙️<span class="badge-check">✓</span></div>
+          <div class="badge-circle next">🎪</div>
+          <div class="badge-circle locked">🎡</div>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-title">Socializzazione</span>
+          <span class="progress-percent">50%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 50%;"></div>
+        </div>
+        <div class="progress-badges">
+          <div class="badge-circle earned">👀<span class="badge-check">✓</span></div>
+          <div class="badge-circle earned">🤝<span class="badge-check">✓</span></div>
+          <div class="badge-circle next">🎾</div>
+          <div class="badge-circle locked">🐕‍🦺</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goals -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">🎯 I Miei Sogni</h2>
+        <a href="#" class="section-link">Modifica</a>
+      </div>
+
+      <div class="goal-card">
+        <div class="goal-icon">☕</div>
+        <div class="goal-content">
+          <div class="goal-title">Portarlo al bar con me</div>
+          <div class="goal-status">In lavorazione • 60% completato</div>
+        </div>
+      </div>
+
+      <div class="goal-card">
+        <div class="goal-icon">🐕</div>
+        <div class="goal-content">
+          <div class="goal-title">Farlo giocare con altri cani</div>
+          <div class="goal-status">In lavorazione • 50% completato</div>
+        </div>
+      </div>
+
+      <div class="goal-card">
+        <div class="goal-icon">🏔️</div>
+        <div class="goal-content">
+          <div class="goal-title">Fare trekking insieme</div>
+          <div class="goal-status ready">✓ Pronto! Hai già il badge necessario</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Lesson -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">📚 Ultima Lezione</h2>
+        <a href="#" class="section-link" onclick="showTab('lezioni'); return false;">Vedi tutte</a>
+      </div>
+
+      <div class="lesson-card">
+        <div class="lesson-header">
+          <span class="lesson-date">5 Febbraio 2026</span>
+          <span class="lesson-number">Lezione #8</span>
+        </div>
+        <div class="lesson-homework">
+          <div class="lesson-homework-title">📋 Compiti per casa</div>
+          <div class="lesson-homework-text">
+            Praticare il "guarda me" quando si vedono cani a distanza. Iniziare con 10 metri, poi avvicinarsi gradualmente.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB: Badge -->
+  <div id="tab-badge" class="tab-content">
+
+    <!-- Last Earned Badge -->
+    <div class="badge-earned-card">
+      <div class="badge-earned-emoji">🤝</div>
+      <div class="badge-earned-title">Primo Saluto!</div>
+      <div class="badge-earned-date">Conquistato il 5 Feb 2026</div>
+      <div class="badge-earned-desc">
+        Rex ha completato un saluto controllato con un altro cane. Grande traguardo!
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title">🏆 Tutti i Badge</h2>
+    </div>
+
+    <h4 style="font-size: 0.85rem; color: var(--text-mid); margin: 16px 0 10px;">Gestione Reattività</h4>
+    <div class="badges-grid">
+      <div class="badge-item earned">
+        <div class="badge-item-emoji">🌲</div>
+        <div class="badge-item-name">Esploratore</div>
+      </div>
+      <div class="badge-item earned">
+        <div class="badge-item-emoji">🚶</div>
+        <div class="badge-item-name">Zona Pedonale</div>
+      </div>
+      <div class="badge-item earned">
+        <div class="badge-item-emoji">🏙️</div>
+        <div class="badge-item-name">Cittadino</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-item-emoji">🎪</div>
+        <div class="badge-item-name">Festa Paese</div>
+      </div>
+      <div class="badge-item locked">
+        <div class="badge-item-emoji">🎡</div>
+        <div class="badge-item-name">Luna Park</div>
+      </div>
+      <div class="badge-item locked">
+        <div class="badge-item-emoji">🏟️</div>
+        <div class="badge-item-name">Stadio</div>
+      </div>
+    </div>
+
+    <h4 style="font-size: 0.85rem; color: var(--text-mid); margin: 16px 0 10px;">Socializzazione</h4>
+    <div class="badges-grid">
+      <div class="badge-item earned">
+        <div class="badge-item-emoji">👀</div>
+        <div class="badge-item-name">Osservatore</div>
+      </div>
+      <div class="badge-item earned">
+        <div class="badge-item-emoji">🤝</div>
+        <div class="badge-item-name">Primo Saluto</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-item-emoji">🎾</div>
+        <div class="badge-item-name">Compagno</div>
+      </div>
+      <div class="badge-item locked">
+        <div class="badge-item-emoji">🐕‍🦺</div>
+        <div class="badge-item-name">Sociale</div>
+      </div>
+      <div class="badge-item locked">
+        <div class="badge-item-emoji">🏆</div>
+        <div class="badge-item-name">Campione</div>
+      </div>
+      <div class="badge-item locked">
+        <div class="badge-item-emoji">👑</div>
+        <div class="badge-item-name">Leader</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB: Diario -->
+  <div id="tab-diario" class="tab-content">
+
+    <div class="section-header">
+      <h2 class="section-title">📝 Il Mio Diario</h2>
+    </div>
+
+    <div class="diary-card">
+      <div class="diary-header">
+        <span class="diary-date">Oggi, 08:32</span>
+        <span class="diary-type doubt">Dubbio</span>
+      </div>
+      <div class="diary-text">
+        Stamattina abbiamo incontrato il cane del vicino. Rex ha abbaiato ma si è calmato dopo che gli ho dato il comando. Piccolo progresso?
+      </div>
+    </div>
+
+    <div class="diary-card">
+      <div class="diary-header">
+        <span class="diary-date">5 Feb 2026</span>
+        <span class="diary-type success">Successo! 🎉</span>
+      </div>
+      <div class="diary-text">
+        Incredibile! Rex ha salutato il cane della mia amica senza problemi. Erano entrambi al guinzaglio e hanno annusato tranquilli. Sono commossa!
+      </div>
+      <div class="diary-response">
+        <div class="diary-response-header">💬 Risposta di Chiara:</div>
+        <div class="diary-response-text">
+          Fantastico Mario! Questo è proprio quello che volevamo vedere. Rex sta imparando a fidarsi di te come guida. Continua così! 🌟
+        </div>
+      </div>
+    </div>
+
+    <div class="diary-card">
+      <div class="diary-header">
+        <span class="diary-date">2 Feb 2026</span>
+        <span class="diary-type doubt">Dubbio</span>
+      </div>
+      <div class="diary-text">
+        Passeggiata in centro. Rex era un po' agitato ma non ha tirato. Però ringhiava sottovoce quando passavano cani. È normale in questa fase?
+      </div>
+      <div class="diary-response">
+        <div class="diary-response-header">💬 Risposta di Chiara:</div>
+        <div class="diary-response-text">
+          Sì, è assolutamente normale! Il ringhio sommesso è il suo modo di gestire lo stress. Il fatto che non tiri è già un grande passo. Stai andando benissimo.
+        </div>
+      </div>
+    </div>
+
+    <div class="diary-card">
+      <div class="diary-header">
+        <span class="diary-date">28 Gen 2026</span>
+        <span class="diary-type problem">Episodio difficile</span>
+      </div>
+      <div class="diary-text">
+        Disastro al parco. Un cane è arrivato di corsa e Rex è impazzito. Ho dovuto trascinarlo via. Mi sono sentita in colpa.
+      </div>
+      <div class="diary-response">
+        <div class="diary-response-header">💬 Risposta di Chiara:</div>
+        <div class="diary-response-text">
+          Non sentirti in colpa, hai fatto bene ad allontanarti. Un cane che arriva di corsa è una situazione difficile anche per cani molto allenati. Ne parliamo alla prossima lezione. ❤️
+        </div>
+      </div>
+    </div>
+
+    <div class="diary-card">
+      <div class="diary-header">
+        <span class="diary-date">22 Gen 2026</span>
+        <span class="diary-type success">Successo! 🎉</span>
+      </div>
+      <div class="diary-text">
+        Prima passeggiata nella zona pedonale del centro! Rex era attento ma controllato. Siamo passati davanti a 3 cani e non ha reagito!
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB: Lezioni -->
+  <div id="tab-lezioni" class="tab-content">
+
+    <div class="section-header">
+      <h2 class="section-title">📚 Le Mie Lezioni</h2>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">5 Febbraio 2026</span>
+        <span class="lesson-number">Lezione #8</span>
+      </div>
+      <div class="lesson-notes">
+        Ottimi progressi nella socializzazione! Rex ha mostrato un saluto controllato con il cane di prova. Mantiene il focus sul proprietario anche in presenza di altri cani.
+      </div>
+      <div class="lesson-homework">
+        <div class="lesson-homework-title">📋 Compiti</div>
+        <div class="lesson-homework-text">
+          Praticare il "guarda me" quando si vedono cani a distanza. Iniziare con 10 metri, poi avvicinarsi gradualmente.
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">29 Gennaio 2026</span>
+        <span class="lesson-number">Lezione #7</span>
+      </div>
+      <div class="lesson-notes">
+        Lavoro sul focus in ambiente urbano. Rex risponde bene ai comandi anche con distrazioni moderate. Da migliorare la gestione quando i cani appaiono all'improvviso.
+      </div>
+      <div class="lesson-homework">
+        <div class="lesson-homework-title">📋 Compiti</div>
+        <div class="lesson-homework-text">
+          Esercizi di desensibilizzazione con video di cani che abbaiano. 2 sessioni da 5 minuti al giorno.
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">22 Gennaio 2026</span>
+        <span class="lesson-number">Lezione #6</span>
+      </div>
+      <div class="lesson-notes">
+        Passeggiata in zona pedonale. Rex ha gestito bene lo stress. Qualche momento di tensione ma recupera velocemente.
+      </div>
+      <div class="lesson-homework">
+        <div class="lesson-homework-title">📋 Compiti</div>
+        <div class="lesson-homework-text">
+          Almeno 3 passeggiate in zona pedonale questa settimana. Portare sempre premi alto valore.
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-date">15 Gennaio 2026</span>
+        <span class="lesson-number">Lezione #5</span>
+      </div>
+      <div class="lesson-notes">
+        Introdotto il concetto di "zona sicura". Rex sta imparando a cercare rassicurazione dal proprietario invece di reagire.
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Add Entry Button -->
+<button class="add-entry-btn">
+  ✏️ Scrivi nel diario
+</button>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <a href="#" class="nav-item active" onclick="showTab('home')">
+    <div class="nav-icon">🏠</div>
+    <div>Home</div>
+  </a>
+  <a href="#" class="nav-item" onclick="showTab('badge')">
+    <div class="nav-icon">🏆</div>
+    <div>Badge</div>
+  </a>
+  <a href="#" class="nav-item" onclick="showTab('diario')">
+    <div class="nav-icon">📝</div>
+    <div>Diario</div>
+  </a>
+  <a href="#" class="nav-item" onclick="showTab('lezioni')">
+    <div class="nav-icon">📚</div>
+    <div>Lezioni</div>
+  </a>
+</nav>
+
+<script>
+function showTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  // Show selected
+  document.getElementById('tab-' + tabName).classList.add('active');
+
+  // Update tab buttons
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.textContent.toLowerCase().includes(tabName) ||
+        (tabName === 'home' && t.textContent.includes('Home'))) {
+      t.classList.add('active');
+    }
+  });
+}
+</script>
+
+</body>
+</html>
