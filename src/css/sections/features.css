@@ -1,0 +1,165 @@
+/* ═══════════════════════════════════════════════════════════════
+   DOG COMMUNICATION CLUB - Cosa Trovi Section
+   ═══════════════════════════════════════════════════════════════ */
+
+.features {
+  background: var(--cream);
+}
+
+.features__wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.features__text .section-label {
+  text-align: left;
+}
+
+.features__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: var(--brown-dark);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 28px;
+}
+
+.features__title em {
+  font-style: italic;
+  color: var(--rose-dark);
+}
+
+.features__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.features__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  font-size: 0.92rem;
+  color: var(--text-mid);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.features__check {
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 50%;
+  background: var(--sage-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sage-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.features__item strong {
+  color: var(--brown-dark);
+  font-weight: 500;
+}
+
+/* Visual Card - Split Layout Orizzontale */
+.features__visual {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(59, 36, 25, 0.12);
+}
+
+/* Parte immagine (sopra) */
+.features__visual-image {
+  position: relative;
+  overflow: hidden;
+  height: 300px;
+}
+
+.features__visual-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Parte testo (sotto) */
+.features__visual-content {
+  background: var(--brown-dark);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Cerchi decorativi sul lato testo */
+.features__visual-content::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 160, 160, 0.15) 0%, transparent 70%);
+}
+
+.features__visual-content::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(143, 168, 122, 0.1) 0%, transparent 70%);
+}
+
+.features__visual-title {
+  font-family: var(--font-heading);
+  color: var(--cream);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.35;
+  position: relative;
+  z-index: 1;
+}
+
+.features__visual-text {
+  color: rgba(245, 237, 228, 0.6);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .features__wrap {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .features__visual-image {
+    height: 200px;
+  }
+
+  .features__visual-content {
+    padding: 28px 24px;
+  }
+}

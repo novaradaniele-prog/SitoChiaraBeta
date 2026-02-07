@@ -1,0 +1,187 @@
+/* ═══════════════════════════════════════════════════════════════
+   DOG COMMUNICATION CLUB - FAQ Section
+   ═══════════════════════════════════════════════════════════════ */
+
+.faq-section {
+  padding: 100px 40px;
+}
+
+.faq {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.faq__item {
+  border-bottom: 1px solid rgba(107, 68, 48, 0.12);
+}
+
+.faq__question {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 22px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--brown-dark);
+  transition: color var(--transition-normal);
+  gap: 16px;
+}
+
+.faq__question:hover {
+  color: var(--brown-warm);
+}
+
+.faq__icon {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  transition: transform var(--transition-normal), color var(--transition-normal);
+  flex-shrink: 0;
+}
+
+.faq__item.open .faq__icon {
+  transform: rotate(45deg);
+  color: var(--rose-dark);
+}
+
+.faq__answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-slow) ease, padding var(--transition-normal);
+}
+
+.faq__item.open .faq__answer {
+  max-height: 240px;
+  padding-bottom: 22px;
+}
+
+.faq__answer p {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ─── FAQ Contact Form ─── */
+.faq__contact {
+  margin-top: 52px;
+  padding: 38px 34px;
+  border-radius: 22px;
+  background: var(--brown-dark);
+  text-align: center;
+}
+
+.faq__contact-title {
+  font-family: var(--font-heading);
+  color: var(--cream);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.faq__contact-text {
+  color: rgba(245, 237, 228, 0.5);
+  font-size: 0.84rem;
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+/* Contact Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.contact-input,
+.contact-textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(245, 237, 228, 0.2);
+  background: rgba(245, 237, 228, 0.08);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color var(--transition-normal), background var(--transition-normal);
+}
+
+.contact-input::placeholder,
+.contact-textarea::placeholder {
+  color: rgba(245, 237, 228, 0.35);
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+  border-color: var(--rose);
+  background: rgba(245, 237, 228, 0.12);
+}
+
+.contact-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.contact-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--rose);
+  color: var(--brown-dark);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition-normal), transform var(--transition-fast);
+  margin-top: 6px;
+}
+
+.contact-btn:hover {
+  background: var(--rose-dark);
+  transform: translateY(-1px);
+}
+
+.contact-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contact-success,
+.contact-error {
+  font-size: 0.82rem;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 400;
+}
+
+.contact-success {
+  background: rgba(143, 168, 122, 0.15);
+  color: var(--sage-light);
+  border: 1px solid rgba(143, 168, 122, 0.3);
+}
+
+.contact-error {
+  background: rgba(212, 160, 160, 0.15);
+  color: var(--rose-light);
+  border: 1px solid rgba(212, 160, 160, 0.3);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .faq-section {
+    padding: 70px 24px;
+  }
+}

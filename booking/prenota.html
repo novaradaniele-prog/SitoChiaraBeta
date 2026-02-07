@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prenota una Consulenza Gratuita - Chiara Capotorto</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-dark: #5C3D2E;
+    --brown-mid: #7E5A45;
+    --brown-warm: #A0714F;
+    --cream: #F5EDE4;
+    --cream-light: #FAF7F3;
+    --rose: #D4A0A0;
+    --rose-light: #F0D5D5;
+    --rose-dark: #B87878;
+    --sage: #8FA87A;
+    --sage-light: #C5D9B0;
+    --sage-dark: #5F7A4A;
+    --text-dark: #4A2E1F;
+    --text-mid: #7E5A45;
+    --text-light: #A08570;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+
+  /* ════════════════════════════════════════
+     HEADER
+  ════════════════════════════════════════ */
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(92, 61, 46, 0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212, 160, 160, 0.15);
+  }
+
+  nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .logo span { color: var(--rose); }
+
+  .menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+  }
+
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--cream);
+    transition: all 0.3s ease;
+  }
+
+  .nav-menu {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-menu a {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+  }
+
+  .nav-menu a:hover { opacity: 1; }
+
+  .nav-cta {
+    background: var(--rose);
+    color: var(--brown-dark);
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+  }
+
+  /* Dropdown Menu */
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    min-width: 240px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(92, 61, 46, 0.2);
+    z-index: 999;
+    padding: 12px 0;
+    flex-direction: column;
+  }
+
+  .mobile-menu.active { display: flex; }
+
+  .mobile-menu a {
+    color: var(--brown-dark);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 14px 24px;
+    transition: all 0.2s;
+  }
+
+  .mobile-menu a:hover {
+    background: var(--cream);
+  }
+
+  /* ════════════════════════════════════════
+     MAIN CONTENT
+  ════════════════════════════════════════ */
+  main {
+    padding-top: 80px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, var(--brown-dark) 0%, #4A2E1F 100%);
+    padding: 50px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 160, 160, 0.12) 0%, transparent 70%);
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .page-header p {
+    color: rgba(245, 237, 228, 0.75);
+    font-size: 1rem;
+    max-width: 550px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Info Cards */
+  .info-section {
+    padding: 32px 40px;
+    background: var(--cream-light);
+  }
+
+  .info-cards {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .info-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(92, 61, 46, 0.08);
+    text-align: center;
+  }
+
+  .info-card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+
+  .info-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 4px;
+  }
+
+  .info-card p {
+    font-size: 0.8rem;
+    color: var(--text-mid);
+  }
+
+  /* ════════════════════════════════════════
+     BOOKING SECTION
+  ════════════════════════════════════════ */
+  .booking-section {
+    padding: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .booking-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(92, 61, 46, 0.1);
+  }
+
+  /* Calendar Side */
+  .calendar-side {
+    padding: 32px;
+    border-right: 1px solid rgba(92, 61, 46, 0.1);
+  }
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .calendar-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .calendar-nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .calendar-nav button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(92, 61, 46, 0.2);
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--brown-dark);
+    transition: all 0.2s;
+  }
+
+  .calendar-nav button:hover {
+    background: var(--cream);
+    border-color: var(--rose);
+  }
+
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .calendar-weekdays span {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-light);
+    padding: 8px 0;
+  }
+
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+
+  .calendar-day:hover:not(.disabled):not(.empty) {
+    background: var(--cream);
+  }
+
+  .calendar-day.selected {
+    background: var(--rose);
+    color: white;
+    font-weight: 600;
+  }
+
+  .calendar-day.today {
+    border-color: var(--sage);
+  }
+
+  .calendar-day.disabled {
+    color: var(--text-light);
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .calendar-day.empty {
+    cursor: default;
+  }
+
+  .calendar-day.has-slots::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    width: 4px;
+    height: 4px;
+    background: var(--sage);
+    border-radius: 50%;
+  }
+
+  .calendar-day {
+    position: relative;
+  }
+
+  /* Time Slots */
+  .slots-container {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(92, 61, 46, 0.1);
+  }
+
+  .slots-container h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 16px;
+  }
+
+  .slots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .slot-btn {
+    padding: 12px 16px;
+    border: 2px solid rgba(92, 61, 46, 0.15);
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--brown-dark);
+    transition: all 0.2s;
+  }
+
+  .slot-btn:hover {
+    border-color: var(--rose);
+    background: var(--rose-light);
+  }
+
+  .slot-btn.selected {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: white;
+  }
+
+  .slot-btn.booked {
+    background: var(--cream);
+    color: var(--text-light);
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .no-slots {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  /* Form Side */
+  .form-side {
+    padding: 32px;
+    background: var(--cream-light);
+  }
+
+  .form-side h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 24px;
+  }
+
+  .booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .form-group label .required {
+    color: var(--rose-dark);
+  }
+
+  .form-group label .optional {
+    color: var(--text-light);
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 14px 16px;
+    border: 2px solid rgba(92, 61, 46, 0.15);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    background: white;
+    transition: all 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--rose);
+    box-shadow: 0 0 0 4px rgba(212, 160, 160, 0.15);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .selected-datetime {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid var(--sage-light);
+    margin-bottom: 8px;
+  }
+
+  .selected-datetime p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+  }
+
+  .selected-datetime strong {
+    color: var(--brown-dark);
+    font-size: 1rem;
+  }
+
+  .submit-btn {
+    background: var(--rose);
+    color: var(--brown-dark);
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 8px;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: var(--rose-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212, 160, 160, 0.3);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Policy Notice */
+  .policy-notice {
+    margin-top: 32px;
+    padding: 20px 24px;
+    background: rgba(212, 160, 160, 0.15);
+    border-radius: 12px;
+    border-left: 4px solid var(--rose);
+  }
+
+  .policy-notice h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 6px;
+  }
+
+  .policy-notice p {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+  }
+
+  /* Success Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 24px;
+    padding: 48px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    animation: modalIn 0.3s ease;
+  }
+
+  @keyframes modalIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .modal-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--sage-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 24px;
+  }
+
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--brown-dark);
+    margin-bottom: 12px;
+  }
+
+  .modal p {
+    color: var(--text-mid);
+    margin-bottom: 24px;
+  }
+
+  .calendar-links {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .calendar-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 2px solid rgba(92, 61, 46, 0.2);
+    border-radius: 50px;
+    text-decoration: none;
+    color: var(--brown-dark);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .calendar-link:hover {
+    border-color: var(--rose);
+    background: var(--rose-light);
+  }
+
+  .modal-close {
+    background: var(--brown-dark);
+    color: var(--cream);
+    padding: 14px 32px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .modal-close:hover {
+    background: #4A2E1F;
+  }
+
+  /* ════════════════════════════════════════
+     FOOTER
+  ════════════════════════════════════════ */
+  footer {
+    background: var(--brown-dark);
+    color: var(--cream);
+    padding: 40px;
+    text-align: center;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-bottom a {
+    color: rgba(245, 237, 228, 0.6);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+
+  .footer-bottom a:hover {
+    color: var(--cream);
+  }
+
+  /* ════════════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .booking-container {
+      grid-template-columns: 1fr;
+    }
+
+    .calendar-side {
+      border-right: none;
+      border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+    }
+
+    .info-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .slots-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .nav-menu { display: none; }
+    .page-header { padding: 32px 20px; }
+    .info-section { padding: 20px; }
+    .booking-section { padding: 20px; }
+    .calendar-side, .form-side { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <nav>
+    <div class="nav-left">
+      <button class="menu-toggle" onclick="toggleMenu()">
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+      <a href="../index.php" class="logo">Chiara <span>Capotorto</span></a>
+    </div>
+
+    <ul class="nav-menu">
+      <li><a href="../index.php#about">Chi Sono</a></li>
+      <li><a href="../index.php#services">Servizi</a></li>
+      <li><a href="../index.php#testimonials">Testimonianze</a></li>
+      <li><a href="../index.php#contact" class="nav-cta">Conosciamoci</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../iscrizione_newsletter.php">Iscriviti alla Newsletter</a>
+  <a href="prenota.html">Calendario</a>
+  <a href="../index.php#services">Scopri i Percorsi</a>
+  <a href="../index.php#contact">Conosciamoci</a>
+</div>
+
+<!-- MAIN -->
+<main>
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>Prenota una <em>Consulenza Gratuita</em></h1>
+    <p>Scegli il giorno e l'orario che preferisci. Ti aspetto per conoscerci!</p>
+  </div>
+
+  <!-- Info Cards -->
+  <section class="info-section">
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-icon">⏱️</div>
+        <h3>60 minuti</h3>
+        <p>Chiamata conoscitiva</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">💻</div>
+        <h3>Videochiamata Zoom</h3>
+        <p>Link via email</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">🎁</div>
+        <h3>Gratuita</h3>
+        <p>Senza impegno</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
+  <section class="booking-section">
+    <div class="booking-container">
+      <!-- Calendar Side -->
+      <div class="calendar-side">
+        <div class="calendar-header">
+          <h2 id="currentMonth">Febbraio 2026</h2>
+          <div class="calendar-nav">
+            <button onclick="changeMonth(-1)">&#8249;</button>
+            <button onclick="changeMonth(1)">&#8250;</button>
+          </div>
+        </div>
+
+        <div class="calendar-weekdays">
+          <span>Lun</span>
+          <span>Mar</span>
+          <span>Mer</span>
+          <span>Gio</span>
+          <span>Ven</span>
+          <span>Sab</span>
+          <span>Dom</span>
+        </div>
+
+        <div class="calendar-days" id="calendarDays">
+          <!-- Days will be generated by JS -->
+        </div>
+
+        <!-- Time Slots -->
+        <div class="slots-container" id="slotsContainer" style="display: none;">
+          <h3>Orari disponibili per il <span id="selectedDateText"></span></h3>
+          <div class="slots-grid" id="slotsGrid">
+            <!-- Slots will be generated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Side -->
+      <div class="form-side">
+        <h2>I tuoi dati</h2>
+
+        <form class="booking-form" id="bookingForm">
+          <!-- Selected DateTime Display -->
+          <div class="selected-datetime" id="selectedDatetime" style="display: none;">
+            <p>Appuntamento selezionato:</p>
+            <strong id="datetimeDisplay"></strong>
+          </div>
+
+          <div class="form-group">
+            <label>Nome e Cognome <span class="required">*</span></label>
+            <input type="text" id="name" required placeholder="Il tuo nome completo">
+          </div>
+
+          <div class="form-group">
+            <label>Email <span class="required">*</span></label>
+            <input type="email" id="email" required placeholder="La tua email">
+          </div>
+
+          <div class="form-group">
+            <label>Telefono <span class="required">*</span></label>
+            <input type="tel" id="phone" required placeholder="Es. 333 1234567">
+          </div>
+
+          <div class="form-group">
+            <label>Nome del cane <span class="optional">(opzionale)</span></label>
+            <input type="text" id="dogName" placeholder="Come si chiama il tuo cane?">
+          </div>
+
+          <div class="form-group">
+            <label>Note <span class="optional">(opzionale)</span></label>
+            <textarea id="notes" placeholder="Raccontami brevemente di cosa vorresti parlare..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn" disabled>
+            Conferma Prenotazione
+          </button>
+
+          <div class="policy-notice">
+            <h4>⚠️ Politica di Cancellazione</h4>
+            <p>Modifiche e annullamenti devono essere effettuati <strong>almeno 24 ore prima</strong> dell'appuntamento.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">✓</div>
+    <h2>Prenotazione Confermata!</h2>
+    <p>Ti ho inviato un'email di conferma con tutti i dettagli e il link Zoom per la nostra chiamata.</p>
+
+    <div class="calendar-links">
+      <a href="#" class="calendar-link" id="googleCalLink" target="_blank">
+        📅 Google Calendar
+      </a>
+      <a href="#" class="calendar-link" id="appleCalLink" download="consulenza-chiara.ics">
+        🍎 Apple Calendar
+      </a>
+    </div>
+
+    <button class="modal-close" onclick="closeModal()">Chiudi</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Chiara Capotorto</span>
+    <a href="../privacy.php">Privacy</a>
+    <a href="../cookie.php">Cookie</a>
+    <a href="../termini.php">Termini</a>
+  </div>
+</footer>
+
+<script>
+// ════════════════════════════════════════
+// CONFIGURAZIONE SLOT DISPONIBILI
+// ════════════════════════════════════════
+// Modifica questi orari per cambiare la disponibilità
+const AVAILABLE_SLOTS = {
+  // 0 = Domenica, 1 = Lunedì, ..., 6 = Sabato
+  1: ['10:00', '11:00', '14:00', '15:00', '16:00'], // Lunedì
+  2: ['10:00', '11:00', '14:00', '15:00', '16:00'], // Martedì
+  3: ['10:00', '11:00', '14:00', '15:00', '16:00'], // Mercoledì
+  4: ['10:00', '11:00', '14:00', '15:00', '16:00'], // Giovedì
+  5: ['10:00', '11:00', '14:00', '15:00'],          // Venerdì
+  // Sabato e Domenica non disponibili
+};
+
+// Giorni da bloccare (formato: 'YYYY-MM-DD')
+const BLOCKED_DATES = [
+  // '2026-02-14', // San Valentino
+  // '2026-12-25', // Natale
+];
+
+// Prenotazioni esistenti (in produzione verranno da Supabase)
+// Formato: { 'YYYY-MM-DD': ['HH:MM', 'HH:MM'] }
+let bookedSlots = {
+  // Esempio: '2026-02-10': ['10:00', '14:00']
+};
+
+// ════════════════════════════════════════
+// VARIABILI GLOBALI
+// ════════════════════════════════════════
+let currentDate = new Date();
+let selectedDate = null;
+let selectedTime = null;
+
+const monthNames = [
+  'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+];
+
+// ════════════════════════════════════════
+// CALENDARIO
+// ════════════════════════════════════════
+function renderCalendar() {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  // Update header
+  document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+
+  // Get first day of month and total days
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const totalDays = lastDay.getDate();
+
+  // Get starting day (0 = Sunday, convert to Monday start)
+  let startDay = firstDay.getDay() - 1;
+  if (startDay < 0) startDay = 6;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  let html = '';
+
+  // Empty cells before first day
+  for (let i = 0; i < startDay; i++) {
+    html += '<div class="calendar-day empty"></div>';
+  }
+
+  // Days of month
+  for (let day = 1; day <= totalDays; day++) {
+    const date = new Date(year, month, day);
+    const dateStr = formatDate(date);
+    const dayOfWeek = date.getDay();
+
+    let classes = ['calendar-day'];
+    let isDisabled = false;
+
+    // Check if past
+    if (date < today) {
+      classes.push('disabled');
+      isDisabled = true;
+    }
+
+    // Check if today
+    if (date.getTime() === today.getTime()) {
+      classes.push('today');
+    }
+
+    // Check if blocked
+    if (BLOCKED_DATES.includes(dateStr)) {
+      classes.push('disabled');
+      isDisabled = true;
+    }
+
+    // Check if has available slots
+    if (!isDisabled && AVAILABLE_SLOTS[dayOfWeek]) {
+      classes.push('has-slots');
+    } else if (!isDisabled) {
+      classes.push('disabled');
+      isDisabled = true;
+    }
+
+    // Check if selected
+    if (selectedDate === dateStr) {
+      classes.push('selected');
+    }
+
+    html += `<div class="${classes.join(' ')}"
+                  ${!isDisabled ? `onclick="selectDate('${dateStr}')"` : ''}>
+               ${day}
+             </div>`;
+  }
+
+  document.getElementById('calendarDays').innerHTML = html;
+}
+
+function changeMonth(delta) {
+  currentDate.setMonth(currentDate.getMonth() + delta);
+
+  // Don't allow past months
+  const today = new Date();
+  if (currentDate.getFullYear() < today.getFullYear() ||
+      (currentDate.getFullYear() === today.getFullYear() &&
+       currentDate.getMonth() < today.getMonth())) {
+    currentDate = new Date();
+  }
+
+  renderCalendar();
+}
+
+function selectDate(dateStr) {
+  selectedDate = dateStr;
+  selectedTime = null;
+
+  renderCalendar();
+  renderSlots();
+  updateForm();
+}
+
+// ════════════════════════════════════════
+// TIME SLOTS
+// ════════════════════════════════════════
+function renderSlots() {
+  const container = document.getElementById('slotsContainer');
+  const grid = document.getElementById('slotsGrid');
+
+  if (!selectedDate) {
+    container.style.display = 'none';
+    return;
+  }
+
+  const date = new Date(selectedDate);
+  const dayOfWeek = date.getDay();
+  const slots = AVAILABLE_SLOTS[dayOfWeek] || [];
+  const booked = bookedSlots[selectedDate] || [];
+
+  // Format date for display
+  const options = { weekday: 'long', day: 'numeric', month: 'long' };
+  document.getElementById('selectedDateText').textContent =
+    date.toLocaleDateString('it-IT', options);
+
+  if (slots.length === 0) {
+    grid.innerHTML = '<div class="no-slots">Nessun orario disponibile per questa data</div>';
+  } else {
+    let html = '';
+    slots.forEach(slot => {
+      const isBooked = booked.includes(slot);
+      const isSelected = selectedTime === slot;
+
+      html += `<button type="button"
+                       class="slot-btn ${isBooked ? 'booked' : ''} ${isSelected ? 'selected' : ''}"
+                       ${isBooked ? 'disabled' : `onclick="selectSlot('${slot}')"`}>
+                 ${slot}
+               </button>`;
+    });
+    grid.innerHTML = html;
+  }
+
+  container.style.display = 'block';
+}
+
+function selectSlot(time) {
+  selectedTime = time;
+  renderSlots();
+  updateForm();
+}
+
+// ════════════════════════════════════════
+// FORM
+// ════════════════════════════════════════
+function updateForm() {
+  const datetimeDiv = document.getElementById('selectedDatetime');
+  const display = document.getElementById('datetimeDisplay');
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (selectedDate && selectedTime) {
+    const date = new Date(selectedDate);
+    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    const dateFormatted = date.toLocaleDateString('it-IT', options);
+
+    display.textContent = `${dateFormatted} alle ${selectedTime}`;
+    datetimeDiv.style.display = 'block';
+    submitBtn.disabled = false;
+  } else {
+    datetimeDiv.style.display = 'none';
+    submitBtn.disabled = true;
+  }
+}
+
+// Form submission
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const booking = {
+    date: selectedDate,
+    time: selectedTime,
+    name: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    dogName: document.getElementById('dogName').value,
+    notes: document.getElementById('notes').value,
+    createdAt: new Date().toISOString()
+  };
+
+  // In produzione: salvare su Supabase e inviare email
+  console.log('Prenotazione:', booking);
+
+  // Simula salvataggio
+  if (!bookedSlots[selectedDate]) {
+    bookedSlots[selectedDate] = [];
+  }
+  bookedSlots[selectedDate].push(selectedTime);
+
+  // Generate calendar links
+  generateCalendarLinks(booking);
+
+  // Show success modal
+  document.getElementById('successModal').classList.add('active');
+
+  // Reset form
+  document.getElementById('bookingForm').reset();
+  selectedDate = null;
+  selectedTime = null;
+  renderCalendar();
+  document.getElementById('slotsContainer').style.display = 'none';
+  updateForm();
+});
+
+// ════════════════════════════════════════
+// CALENDAR LINKS
+// ════════════════════════════════════════
+function generateCalendarLinks(booking) {
+  const startDate = new Date(`${booking.date}T${booking.time}:00`);
+  const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // +1 ora
+
+  // Google Calendar
+  const googleStart = startDate.toISOString().replace(/-|:|\.\d+/g, '');
+  const googleEnd = endDate.toISOString().replace(/-|:|\.\d+/g, '');
+  const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Consulenza con Chiara Capotorto')}&dates=${googleStart}/${googleEnd}&details=${encodeURIComponent('Consulenza gratuita di 60 minuti via Zoom.\\n\\nLink Zoom: [verrà inviato via email]')}&location=Zoom`;
+
+  document.getElementById('googleCalLink').href = googleUrl;
+
+  // Apple Calendar (ICS file)
+  const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${googleStart}
+DTEND:${googleEnd}
+SUMMARY:Consulenza con Chiara Capotorto
+DESCRIPTION:Consulenza gratuita di 60 minuti via Zoom.
+LOCATION:Zoom
+END:VEVENT
+END:VCALENDAR`;
+
+  const blob = new Blob([icsContent], { type: 'text/calendar' });
+  document.getElementById('appleCalLink').href = URL.createObjectURL(blob);
+}
+
+function closeModal() {
+  document.getElementById('successModal').classList.remove('active');
+}
+
+// ════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('active');
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobileMenu');
+  const toggle = document.querySelector('.menu-toggle');
+  if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.remove('active');
+  }
+});
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+renderCalendar();
+</script>
+
+</body>
+</html>

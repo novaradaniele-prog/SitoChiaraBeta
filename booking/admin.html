@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Gestione Prenotazioni</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-dark: #5C3D2E;
+    --brown-mid: #7E5A45;
+    --cream: #F5EDE4;
+    --cream-light: #FAF7F3;
+    --rose: #D4A0A0;
+    --rose-light: #F0D5D5;
+    --rose-dark: #B87878;
+    --sage: #8FA87A;
+    --sage-light: #C5D9B0;
+    --text-dark: #4A2E1F;
+    --text-mid: #7E5A45;
+    --text-light: #A08570;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .admin-header {
+    background: var(--brown-dark);
+    color: var(--cream);
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .admin-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+  }
+
+  .admin-header h1 span {
+    color: var(--rose);
+  }
+
+  .logout-btn {
+    background: rgba(255,255,255,0.1);
+    color: var(--cream);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .logout-btn:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* Main Layout */
+  .admin-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: calc(100vh - 70px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: white;
+    border-right: 1px solid rgba(92, 61, 46, 0.1);
+    padding: 24px;
+  }
+
+  .sidebar-section {
+    margin-bottom: 32px;
+  }
+
+  .sidebar-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--brown-dark);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--rose-light);
+  }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .stat-card {
+    background: var(--cream-light);
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-mid);
+  }
+
+  /* Slot Editor */
+  .day-slots {
+    margin-bottom: 12px;
+  }
+
+  .day-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--brown-dark);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-slot-btn {
+    background: var(--sage);
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .slots-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .slot-tag {
+    background: var(--rose-light);
+    color: var(--brown-dark);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .slot-remove {
+    background: none;
+    border: none;
+    color: var(--rose-dark);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .no-slots {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  /* Block Date */
+  .block-date-form {
+    display: flex;
+    gap: 8px;
+  }
+
+  .block-date-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid rgba(92, 61, 46, 0.2);
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  .block-date-form button {
+    background: var(--rose);
+    color: var(--brown-dark);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .blocked-dates-list {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .blocked-tag {
+    background: #ffebee;
+    color: #c62828;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Main Content */
+  .main-content {
+    padding: 24px 32px;
+  }
+
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .content-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--brown-dark);
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-tab {
+    padding: 10px 20px;
+    border: 2px solid rgba(92, 61, 46, 0.2);
+    border-radius: 50px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .filter-tab:hover {
+    border-color: var(--rose);
+  }
+
+  .filter-tab.active {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: white;
+  }
+
+  /* Bookings Table */
+  .bookings-table {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(92, 61, 46, 0.08);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    background: var(--cream-light);
+    padding: 16px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+  }
+
+  td {
+    padding: 16px;
+    border-bottom: 1px solid rgba(92, 61, 46, 0.05);
+    font-size: 0.9rem;
+  }
+
+  tr:hover {
+    background: var(--cream-light);
+  }
+
+  .booking-date {
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .booking-time {
+    color: var(--rose-dark);
+    font-weight: 500;
+  }
+
+  .booking-contact {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .status-upcoming {
+    background: var(--sage-light);
+    color: var(--sage-dark);
+  }
+
+  .status-past {
+    background: var(--cream);
+    color: var(--text-light);
+  }
+
+  .status-cancelled {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  .action-btns {
+    display: flex;
+    gap: 8px;
+  }
+
+  .action-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+
+  .action-btn.cancel {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  .action-btn.cancel:hover {
+    background: #ffcdd2;
+  }
+
+  .action-btn.view {
+    background: var(--cream);
+    color: var(--brown-dark);
+  }
+
+  .action-btn.view:hover {
+    background: var(--rose-light);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-light);
+  }
+
+  .empty-state span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 400px;
+    width: 90%;
+  }
+
+  .modal h3 {
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 16px;
+  }
+
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal-form input {
+    padding: 12px;
+    border: 1px solid rgba(92, 61, 46, 0.2);
+    border-radius: 8px;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .modal-actions button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .modal-cancel {
+    background: var(--cream);
+    border: 1px solid rgba(92, 61, 46, 0.2);
+    color: var(--text-mid);
+  }
+
+  .modal-confirm {
+    background: var(--rose);
+    border: none;
+    color: var(--brown-dark);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .admin-container {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      border-right: none;
+      border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="admin-header">
+  <h1>Admin <span>Prenotazioni</span></h1>
+  <button class="logout-btn">Esci</button>
+</header>
+
+<!-- Main Container -->
+<div class="admin-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <!-- Stats -->
+    <div class="sidebar-section">
+      <h3>Statistiche</h3>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="totalBookings">0</div>
+          <div class="stat-label">Prenotazioni Totali</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="upcomingBookings">0</div>
+          <div class="stat-label">In Arrivo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slot Management -->
+    <div class="sidebar-section">
+      <h3>Orari Disponibili</h3>
+
+      <div class="day-slots">
+        <div class="day-label">
+          Lunedì
+          <button class="add-slot-btn" onclick="addSlot(1)">+</button>
+        </div>
+        <div class="slots-list" id="slots-1"></div>
+      </div>
+
+      <div class="day-slots">
+        <div class="day-label">
+          Martedì
+          <button class="add-slot-btn" onclick="addSlot(2)">+</button>
+        </div>
+        <div class="slots-list" id="slots-2"></div>
+      </div>
+
+      <div class="day-slots">
+        <div class="day-label">
+          Mercoledì
+          <button class="add-slot-btn" onclick="addSlot(3)">+</button>
+        </div>
+        <div class="slots-list" id="slots-3"></div>
+      </div>
+
+      <div class="day-slots">
+        <div class="day-label">
+          Giovedì
+          <button class="add-slot-btn" onclick="addSlot(4)">+</button>
+        </div>
+        <div class="slots-list" id="slots-4"></div>
+      </div>
+
+      <div class="day-slots">
+        <div class="day-label">
+          Venerdì
+          <button class="add-slot-btn" onclick="addSlot(5)">+</button>
+        </div>
+        <div class="slots-list" id="slots-5"></div>
+      </div>
+
+      <div class="day-slots">
+        <div class="day-label">
+          Sabato
+          <button class="add-slot-btn" onclick="addSlot(6)">+</button>
+        </div>
+        <div class="slots-list" id="slots-6"></div>
+      </div>
+
+      <div class="day-slots">
+        <div class="day-label">
+          Domenica
+          <button class="add-slot-btn" onclick="addSlot(0)">+</button>
+        </div>
+        <div class="slots-list" id="slots-0"></div>
+      </div>
+    </div>
+
+    <!-- Block Dates -->
+    <div class="sidebar-section">
+      <h3>Blocca Date</h3>
+      <div class="block-date-form">
+        <input type="date" id="blockDateInput">
+        <button onclick="blockDate()">Blocca</button>
+      </div>
+      <div class="blocked-dates-list" id="blockedDatesList"></div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-header">
+      <h2>Prenotazioni</h2>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterBookings('all')">Tutte</button>
+        <button class="filter-tab" onclick="filterBookings('upcoming')">In Arrivo</button>
+        <button class="filter-tab" onclick="filterBookings('past')">Passate</button>
+      </div>
+    </div>
+
+    <div class="bookings-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Data e Ora</th>
+            <th>Cliente</th>
+            <th>Contatto</th>
+            <th>Cane</th>
+            <th>Stato</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody id="bookingsTableBody">
+          <!-- Bookings will be rendered here -->
+        </tbody>
+      </table>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <span>📅</span>
+        <p>Nessuna prenotazione trovata</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Add Slot Modal -->
+<div class="modal-overlay" id="addSlotModal">
+  <div class="modal">
+    <h3>Aggiungi Orario</h3>
+    <div class="modal-form">
+      <input type="time" id="newSlotTime">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Annulla</button>
+      <button class="modal-confirm" onclick="confirmAddSlot()">Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// DATA (in produzione da Supabase)
+// ════════════════════════════════════════
+let availableSlots = {
+  1: ['10:00', '11:00', '14:00', '15:00', '16:00'],
+  2: ['10:00', '11:00', '14:00', '15:00', '16:00'],
+  3: ['10:00', '11:00', '14:00', '15:00', '16:00'],
+  4: ['10:00', '11:00', '14:00', '15:00', '16:00'],
+  5: ['10:00', '11:00', '14:00', '15:00'],
+  6: [],
+  0: []
+};
+
+let blockedDates = [];
+
+let bookings = [
+  // Dati di esempio
+  {
+    id: 1,
+    date: '2026-02-10',
+    time: '10:00',
+    name: 'Maria Rossi',
+    email: 'maria@example.com',
+    phone: '333 1234567',
+    dogName: 'Rocky',
+    notes: 'Problemi di ansia',
+    status: 'upcoming'
+  },
+  {
+    id: 2,
+    date: '2026-02-12',
+    time: '14:00',
+    name: 'Luca Bianchi',
+    email: 'luca@example.com',
+    phone: '347 9876543',
+    dogName: 'Luna',
+    notes: '',
+    status: 'upcoming'
+  },
+  {
+    id: 3,
+    date: '2026-01-20',
+    time: '11:00',
+    name: 'Anna Verdi',
+    email: 'anna@example.com',
+    phone: '320 5551234',
+    dogName: 'Max',
+    notes: 'Cucciolo di 4 mesi',
+    status: 'past'
+  }
+];
+
+let currentFilter = 'all';
+let currentDayForSlot = null;
+
+// ════════════════════════════════════════
+// RENDER FUNCTIONS
+// ════════════════════════════════════════
+function renderSlots() {
+  for (let day = 0; day <= 6; day++) {
+    const container = document.getElementById(`slots-${day}`);
+    const slots = availableSlots[day] || [];
+
+    if (slots.length === 0) {
+      container.innerHTML = '<span class="no-slots">Nessuno</span>';
+    } else {
+      container.innerHTML = slots.map(slot => `
+        <span class="slot-tag">
+          ${slot}
+          <button class="slot-remove" onclick="removeSlot(${day}, '${slot}')">&times;</button>
+        </span>
+      `).join('');
+    }
+  }
+}
+
+function renderBlockedDates() {
+  const container = document.getElementById('blockedDatesList');
+
+  if (blockedDates.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = blockedDates.map(date => {
+    const formatted = new Date(date).toLocaleDateString('it-IT', {
+      day: 'numeric',
+      month: 'short'
+    });
+    return `
+      <span class="blocked-tag">
+        ${formatted}
+        <button class="slot-remove" onclick="unblockDate('${date}')">&times;</button>
+      </span>
+    `;
+  }).join('');
+}
+
+function renderBookings() {
+  const tbody = document.getElementById('bookingsTableBody');
+  const emptyState = document.getElementById('emptyState');
+
+  let filtered = bookings;
+  if (currentFilter === 'upcoming') {
+    filtered = bookings.filter(b => b.status === 'upcoming');
+  } else if (currentFilter === 'past') {
+    filtered = bookings.filter(b => b.status === 'past' || b.status === 'cancelled');
+  }
+
+  // Sort by date
+  filtered.sort((a, b) => {
+    const dateA = new Date(`${a.date}T${a.time}`);
+    const dateB = new Date(`${b.date}T${b.time}`);
+    return currentFilter === 'past' ? dateB - dateA : dateA - dateB;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    emptyState.style.display = 'block';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(booking => {
+    const date = new Date(booking.date);
+    const dateFormatted = date.toLocaleDateString('it-IT', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short'
+    });
+
+    let statusClass = 'status-upcoming';
+    let statusText = 'In arrivo';
+    if (booking.status === 'past') {
+      statusClass = 'status-past';
+      statusText = 'Completata';
+    } else if (booking.status === 'cancelled') {
+      statusClass = 'status-cancelled';
+      statusText = 'Annullata';
+    }
+
+    return `
+      <tr>
+        <td>
+          <div class="booking-date">${dateFormatted}</div>
+          <div class="booking-time">${booking.time}</div>
+        </td>
+        <td>${booking.name}</td>
+        <td class="booking-contact">
+          ${booking.email}<br>
+          ${booking.phone}
+        </td>
+        <td>${booking.dogName || '-'}</td>
+        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+        <td>
+          <div class="action-btns">
+            ${booking.status === 'upcoming' ? `
+              <button class="action-btn cancel" onclick="cancelBooking(${booking.id})">Annulla</button>
+            ` : ''}
+            <button class="action-btn view" onclick="viewBooking(${booking.id})">Dettagli</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderStats() {
+  document.getElementById('totalBookings').textContent = bookings.length;
+  document.getElementById('upcomingBookings').textContent =
+    bookings.filter(b => b.status === 'upcoming').length;
+}
+
+// ════════════════════════════════════════
+// SLOT MANAGEMENT
+// ════════════════════════════════════════
+function addSlot(day) {
+  currentDayForSlot = day;
+  document.getElementById('newSlotTime').value = '';
+  document.getElementById('addSlotModal').classList.add('active');
+}
+
+function confirmAddSlot() {
+  const time = document.getElementById('newSlotTime').value;
+  if (!time || currentDayForSlot === null) return;
+
+  if (!availableSlots[currentDayForSlot]) {
+    availableSlots[currentDayForSlot] = [];
+  }
+
+  if (!availableSlots[currentDayForSlot].includes(time)) {
+    availableSlots[currentDayForSlot].push(time);
+    availableSlots[currentDayForSlot].sort();
+  }
+
+  closeModal();
+  renderSlots();
+  saveConfig();
+}
+
+function removeSlot(day, time) {
+  availableSlots[day] = availableSlots[day].filter(t => t !== time);
+  renderSlots();
+  saveConfig();
+}
+
+// ════════════════════════════════════════
+// BLOCK DATES
+// ════════════════════════════════════════
+function blockDate() {
+  const input = document.getElementById('blockDateInput');
+  const date = input.value;
+  if (!date) return;
+
+  if (!blockedDates.includes(date)) {
+    blockedDates.push(date);
+    blockedDates.sort();
+  }
+
+  input.value = '';
+  renderBlockedDates();
+  saveConfig();
+}
+
+function unblockDate(date) {
+  blockedDates = blockedDates.filter(d => d !== date);
+  renderBlockedDates();
+  saveConfig();
+}
+
+// ════════════════════════════════════════
+// BOOKINGS
+// ════════════════════════════════════════
+function filterBookings(filter) {
+  currentFilter = filter;
+
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  event.target.classList.add('active');
+
+  renderBookings();
+}
+
+function cancelBooking(id) {
+  if (!confirm('Sei sicura di voler annullare questa prenotazione?')) return;
+
+  const booking = bookings.find(b => b.id === id);
+  if (booking) {
+    booking.status = 'cancelled';
+    renderBookings();
+    renderStats();
+    // In produzione: aggiornare Supabase e inviare email
+  }
+}
+
+function viewBooking(id) {
+  const booking = bookings.find(b => b.id === id);
+  if (booking) {
+    alert(`
+Nome: ${booking.name}
+Email: ${booking.email}
+Telefono: ${booking.phone}
+Cane: ${booking.dogName || 'Non specificato'}
+Note: ${booking.notes || 'Nessuna'}
+    `);
+  }
+}
+
+// ════════════════════════════════════════
+// PERSISTENCE (localStorage per demo)
+// ════════════════════════════════════════
+function saveConfig() {
+  localStorage.setItem('booking_slots', JSON.stringify(availableSlots));
+  localStorage.setItem('booking_blocked', JSON.stringify(blockedDates));
+  console.log('Configurazione salvata');
+}
+
+function loadConfig() {
+  const savedSlots = localStorage.getItem('booking_slots');
+  const savedBlocked = localStorage.getItem('booking_blocked');
+
+  if (savedSlots) {
+    availableSlots = JSON.parse(savedSlots);
+  }
+  if (savedBlocked) {
+    blockedDates = JSON.parse(savedBlocked);
+  }
+}
+
+function closeModal() {
+  document.getElementById('addSlotModal').classList.remove('active');
+  currentDayForSlot = null;
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+loadConfig();
+renderSlots();
+renderBlockedDates();
+renderBookings();
+renderStats();
+</script>
+
+</body>
+</html>

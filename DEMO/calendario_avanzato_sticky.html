@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario Corsi - Dog Communication Club</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Palette Colori */
+      --brown-dark: #5C3D2E;
+      --brown-mid: #7E5A45;
+      --brown-warm: #A0714F;
+      --cream: #F5EDE4;
+      --cream-light: #FAF7F3;
+      --rose: #D4A0A0;
+      --rose-light: #F0D5D5;
+      --rose-dark: #B87878;
+      --sage: #8FA87A;
+      --sage-light: #C5D9B0;
+      --sage-dark: #5F7A4A;
+      --text-dark: #4A2E1F;
+      --text-mid: #7E5A45;
+      --text-light: #A08570;
+      --success: #7A9B6E;
+      --error: #C17A7A;
+      --warning: #D4B896;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--cream-light) 0%, var(--cream) 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HEADER DEL CALENDARIO
+       ═══════════════════════════════════════════════════════════ */
+    .calendar-header {
+      background: var(--brown-dark);
+      color: var(--cream-light);
+      padding: 20px 40px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .calendar-header::before {
+      display: none;
+    }
+
+    .month-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 8px;
+    }
+
+    .nav-arrow {
+      background: rgba(245, 237, 228, 0.1);
+      border: 2px solid rgba(245, 237, 228, 0.3);
+      color: var(--cream-light);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1.2rem;
+    }
+
+    .nav-arrow:hover {
+      background: var(--rose);
+      color: var(--brown-dark);
+      border-color: var(--rose);
+      transform: scale(1.1);
+    }
+
+    .calendar-month {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--cream-light);
+      margin-bottom: 4px;
+    }
+
+    .calendar-theme {
+      font-size: 1rem;
+      color: var(--rose-light);
+      font-weight: 300;
+      margin-bottom: 4px;
+    }
+
+    .calendar-subtitle {
+      font-size: 0.85rem;
+      color: rgba(245, 237, 228, 0.7);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       LEGENDA - FIXED BOTTOM RIGHT
+       ═══════════════════════════════════════════════════════════ */
+    .legend-section {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 90;
+      max-width: 320px;
+    }
+
+    .legend-container {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(92, 61, 46, 0.2);
+      border: 2px solid var(--brown-dark);
+    }
+
+    .legend-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--brown-dark);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .legend-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: var(--cream-light);
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.live { background: var(--rose-dark); }
+    .legend-dot.dispense { background: var(--sage); }
+    .legend-dot.esercizi { background: var(--brown-warm); }
+    .legend-dot.newsletter { background: var(--warning); }
+    .legend-dot.trial { 
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    }
+
+    .legend-label {
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    .legend-badge {
+      margin-left: auto;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 50px;
+      background: var(--rose-light);
+      color: var(--rose-dark);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .legend-badge.public {
+      background: var(--sage-light);
+      color: var(--sage-dark);
+    }
+
+    .legend-badge.trial {
+      background: linear-gradient(135deg, #FFE5B4 0%, #FFD700 100%);
+      color: #8B6914;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CALENDARIO
+       ═══════════════════════════════════════════════════════════ */
+    .calendar-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    .calendar-grid {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(92, 61, 46, 0.08);
+      border: 1px solid rgba(92, 61, 46, 0.06);
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .weekday {
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px;
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+    }
+
+    .day-cell {
+      background: var(--cream-light);
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 140px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .day-cell:hover {
+      border-color: var(--rose-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(212, 160, 160, 0.15);
+    }
+
+    .day-cell.empty {
+      background: transparent;
+    }
+
+    .day-cell.empty:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: transparent;
+    }
+
+    .day-number {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--brown-dark);
+      margin-bottom: 8px;
+    }
+
+    .day-cell.today .day-number {
+      background: var(--rose);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+
+    .events {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .event {
+      background: white;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      border-left: 4px solid;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .event:hover {
+      transform: translateX(2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .event.live {
+      border-color: var(--rose-dark);
+      background: linear-gradient(135deg, #fff 0%, rgba(212, 160, 160, 0.08) 100%);
+    }
+
+    .event.dispense {
+      border-color: var(--sage);
+      background: linear-gradient(135deg, #fff 0%, rgba(143, 168, 122, 0.08) 100%);
+    }
+
+    .event.esercizi {
+      border-color: var(--brown-warm);
+      background: linear-gradient(135deg, #fff 0%, rgba(160, 113, 79, 0.08) 100%);
+    }
+
+    .event.newsletter {
+      border-color: var(--warning);
+      background: linear-gradient(135deg, #fff 0%, rgba(212, 184, 150, 0.08) 100%);
+    }
+
+    .event.trial {
+      border-color: #FFD700;
+      background: linear-gradient(135deg, #fff 0%, rgba(255, 215, 0, 0.15) 100%);
+      position: relative;
+    }
+
+    .event.trial::before {
+      content: '⭐';
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-size: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .event-time {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .event-title {
+      color: var(--text-mid);
+      font-size: 0.75rem;
+      margin-bottom: 6px;
+    }
+
+    .event-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .event-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .event-badge.members {
+      background: var(--rose-light);
+      color: var(--rose-dark);
+    }
+
+    .event-badge.public {
+      background: var(--sage-light);
+      color: var(--sage-dark);
+    }
+
+    .event-badge.trial {
+      background: linear-gradient(135deg, #FFE5B4 0%, #FFD700 100%);
+      color: #8B6914;
+    }
+
+    .gcal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      padding: 4px 8px;
+      background: white;
+      border: 1px solid var(--sage-light);
+      color: var(--sage-dark);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .gcal-btn:hover {
+      background: var(--sage-light);
+      transform: scale(1.05);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TRIAL BANNER
+       ═══════════════════════════════════════════════════════════ */
+    .trial-banner {
+      background: linear-gradient(135deg, #FFE5B4 0%, #FFD700 100%);
+      padding: 24px 40px;
+      text-align: center;
+      border-bottom: 3px solid #FFA500;
+    }
+
+    .trial-banner-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .trial-banner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #8B6914;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .trial-banner p {
+      color: #6B5010;
+      font-size: 0.95rem;
+      font-weight: 400;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NEWSLETTER SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--rose-light) 0%, var(--cream-light) 100%);
+      padding: 60px 40px;
+      border-top: 1px solid rgba(92, 61, 46, 0.1);
+    }
+
+    .newsletter-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .newsletter-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--brown-dark);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .newsletter-title em {
+      font-style: italic;
+      color: var(--brown-warm);
+    }
+
+    .newsletter-subtitle {
+      color: var(--text-mid);
+      font-size: 1rem;
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+
+    .newsletter-cta {
+      display: inline-block;
+      padding: 16px 42px;
+      background: var(--rose);
+      color: var(--brown-dark);
+      text-decoration: none;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      box-shadow: 0 6px 25px rgba(212, 160, 160, 0.25);
+    }
+
+    .newsletter-cta:hover {
+      background: var(--rose-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 35px rgba(212, 160, 160, 0.35);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--brown-dark);
+      color: var(--cream-light);
+      padding: 60px 40px 0;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      padding-bottom: 50px;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--cream-light);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .footer-brand h3 span {
+      color: var(--rose);
+    }
+
+    .footer-tagline {
+      color: rgba(245, 237, 228, 0.7);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cream-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      background: rgba(245, 237, 228, 0.1);
+      border-radius: 50px;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .footer-social a:hover {
+      background: var(--rose);
+      color: var(--brown-dark);
+      transform: translateY(-2px);
+    }
+
+    .social-icon {
+      font-size: 1.2rem;
+    }
+
+    .footer-links h4,
+    .footer-legal h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--cream-light);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .footer-links ul,
+    .footer-legal ul {
+      list-style: none;
+    }
+
+    .footer-links li,
+    .footer-legal li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(245, 237, 228, 0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      font-weight: 400;
+    }
+
+    .footer-links a:hover {
+      color: var(--rose);
+      transform: translateX(4px);
+    }
+
+    .link-emoji {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .footer-legal a {
+      color: rgba(245, 237, 228, 0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: block;
+      transition: all 0.3s;
+      font-weight: 400;
+    }
+
+    .footer-legal a:hover {
+      color: var(--rose);
+      transform: translateX(4px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(245, 237, 228, 0.15);
+      padding: 24px 40px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .footer-bottom p {
+      color: rgba(245, 237, 228, 0.6);
+      font-size: 0.85rem;
+      font-weight: 300;
+    }
+
+    .footer-bottom a {
+      color: var(--rose);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--rose-light);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .days-grid {
+        gap: 8px;
+      }
+
+      .day-cell {
+        min-height: 120px;
+        padding: 10px;
+      }
+
+      .event {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .calendar-header {
+        padding: 16px 24px;
+      }
+
+      .month-navigation {
+        gap: 20px;
+        margin-bottom: 6px;
+      }
+
+      .nav-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+
+      .calendar-theme {
+        font-size: 0.9rem;
+      }
+
+      .calendar-subtitle {
+        font-size: 0.8rem;
+      }
+
+      .legend-section {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+        max-width: none;
+      }
+
+      .legend-container {
+        padding: 16px;
+      }
+
+      .legend-title {
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+
+      .legend-item {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+      }
+
+      .trial-banner {
+        padding: 20px 24px;
+      }
+
+      .calendar-wrapper {
+        padding: 30px 24px 180px;
+      }
+
+      .calendar-grid {
+        padding: 24px 16px;
+      }
+
+      .weekday {
+        font-size: 0.7rem;
+        padding: 8px 4px;
+      }
+
+      .days-grid {
+        gap: 6px;
+      }
+
+      .day-cell {
+        min-height: 100px;
+        padding: 8px;
+      }
+
+      .day-number {
+        font-size: 0.95rem;
+      }
+
+      .event {
+        font-size: 0.7rem;
+        padding: 6px 8px;
+      }
+
+      .event-title {
+        font-size: 0.7rem;
+      }
+
+      .gcal-btn {
+        font-size: 0.6rem;
+        padding: 3px 6px;
+      }
+
+      .newsletter-section {
+        padding: 40px 24px;
+      }
+
+      .newsletter-cta {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .footer {
+        padding: 40px 24px 0;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer-social {
+        flex-wrap: wrap;
+      }
+
+      .footer-bottom {
+        padding: 20px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .legend-section {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+      }
+
+      .legend-container {
+        padding: 12px;
+      }
+
+      .legend-title {
+        font-size: 0.9rem;
+      }
+
+      .legend-item {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+        gap: 8px;
+      }
+
+      .legend-badge {
+        font-size: 0.6rem;
+        padding: 2px 6px;
+      }
+
+      .weekday {
+        font-size: 0.65rem;
+      }
+
+      .day-cell {
+        min-height: 90px;
+        padding: 6px;
+      }
+
+      .event {
+        padding: 4px 6px;
+      }
+
+      .event-badge {
+        display: none;
+      }
+
+      .gcal-btn {
+        font-size: 0.55rem;
+      }
+
+      .calendar-wrapper {
+        padding: 20px 12px 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TRIAL BANNER
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="trial-banner">
+    <div class="trial-banner-content">
+      <h3>⭐ Live Gratuita del 12 Febbraio ⭐</h3>
+      <p>Prova il nostro metodo! Partecipa alla Live "Gestione Guinzaglio" - Aperta a tutti come regalo per testare la membership</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HEADER DEL CALENDARIO
+       ═══════════════════════════════════════════════════════════ -->
+  <header class="calendar-header">
+    <div class="month-navigation">
+      <button class="nav-arrow" id="prevMonth" aria-label="Mese precedente">←</button>
+      <h1 class="calendar-month">
+        <span id="monthName">Febbraio</span> <span id="yearName">2026</span>
+      </h1>
+      <button class="nav-arrow" id="nextMonth" aria-label="Mese successivo">→</button>
+    </div>
+    <p class="calendar-theme" id="monthTheme">🐕 Tema del Mese: Reattività nel Cane</p>
+    <p class="calendar-subtitle" id="monthSubtitle">
+      Impara a gestire l'iper-reattività con tecniche di comunicazione calma e consapevole
+    </p>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LEGENDA
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="legend-section">
+    <div class="legend-container">
+      <h2 class="legend-title">📅 Legenda Eventi</h2>
+      <div class="legend-grid">
+        <div class="legend-item">
+          <div class="legend-dot trial"></div>
+          <span class="legend-label">Live Trial Gratuita</span>
+          <span class="legend-badge trial">Gratis</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot live"></div>
+          <span class="legend-label">Live Q&A</span>
+          <span class="legend-badge members">Members</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot dispense"></div>
+          <span class="legend-label">Dispense</span>
+          <span class="legend-badge members">Members</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot esercizi"></div>
+          <span class="legend-label">Esercizi</span>
+          <span class="legend-badge members">Members</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot newsletter"></div>
+          <span class="legend-label">Newsletter</span>
+          <span class="legend-badge public">Tutti</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CALENDARIO
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="calendar-wrapper">
+    <div class="calendar-grid">
+      
+      <!-- Giorni della settimana -->
+      <div class="weekdays">
+        <div class="weekday">Lun</div>
+        <div class="weekday">Mar</div>
+        <div class="weekday">Mer</div>
+        <div class="weekday">Gio</div>
+        <div class="weekday">Ven</div>
+        <div class="weekday">Sab</div>
+        <div class="weekday">Dom</div>
+      </div>
+
+      <!-- Griglia giorni (verrà popolata da JavaScript) -->
+      <div class="days-grid" id="daysGrid">
+        <!-- JavaScript genererà i giorni qui -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       NEWSLETTER SECTION
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <h2 class="newsletter-title">✉️ Ricevi <em>consigli settimanali</em></h2>
+      <p class="newsletter-subtitle">Iscriviti alla newsletter per tips esclusivi, nuove risorse e storie dalla community</p>
+      
+      <a href="newsletter_form_page.html" class="newsletter-cta">
+        Iscriviti alla Newsletter
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-content">
+      
+      <!-- COLONNA 1: BRAND + SOCIAL -->
+      <div class="footer-brand">
+        <h3>Dog Communication <span>Club</span></h3>
+        <p class="footer-tagline">
+          La prima scuola online di educazione cinofila.<br>
+          Comunicazione vera, senza urla, senza punizioni.
+        </p>
+        <div class="footer-social">
+          <a href="https://facebook.com" target="_blank">
+            <span class="social-icon">😎</span>
+            <span>Facebook</span>
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <span class="social-icon">📷</span>
+            <span>Instagram</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- COLONNA 2: LINK RAPIDI -->
+      <div class="footer-links">
+        <h4>Link Rapidi</h4>
+        <ul>
+          <li><a href="#hero"><span class="link-emoji">🏠</span> Home</a></li>
+          <li><a href="#learn"><span class="link-emoji">📚</span> Cosa impari</a></li>
+          <li><a href="#features"><span class="link-emoji">✨</span> Cosa trovi</a></li>
+          <li><a href="#pricing"><span class="link-emoji">💎</span> Percorsi</a></li>
+          <li><a href="#faq"><span class="link-emoji">❓</span> FAQ</a></li>
+          <li><a href="#contact"><span class="link-emoji">✉️</span> Contatti</a></li>
+        </ul>
+      </div>
+
+      <!-- COLONNA 3: LEGALE -->
+      <div class="footer-legal">
+        <h4>Informazioni Legali</h4>
+        <ul>
+          <li><a href="/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/cookie-policy">Cookie Policy</a></li>
+          <li><a href="/termini-condizioni">Termini e Condizioni</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="footer-bottom">
+      <p>
+        © <span id="currentYear">2026</span> Dog Communication Club. Tutti i diritti riservati. 
+        <br>
+        Made with 🐾 for dogs and humans
+      </p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       JAVASCRIPT
+       ═══════════════════════════════════════════════════════════ -->
+  <script>
+    // ═══ CONFIGURAZIONE ═══
+    const STORAGE_KEY = 'dogClubEvents';
+    
+    // ═══ EVENTI PREDEFINITI (per febbraio 2026) ═══
+    const defaultEvents = {
+      '2026-2': [
+        // Settimana 1
+        { day: 3, type: 'esercizi', time: '09:00', title: 'Esercizi pratici', access: 'members' },
+        { day: 5, type: 'live', time: '12:00', title: 'Live Q&A Reattività', access: 'members' },
+        { day: 6, type: 'newsletter', time: '11:00', title: 'Newsletter Settimanale', access: 'public' },
+        { day: 6, type: 'dispense', time: '19:00', title: 'Dispensa: Trigger Analysis', access: 'members' },
+        
+        // Settimana 2
+        { day: 10, type: 'esercizi', time: '09:00', title: 'Esercizi settimanali', access: 'members' },
+        { day: 12, type: 'trial', time: '12:00', title: '🎁 LIVE GRATUITA: Gestione Guinzaglio', access: 'trial', description: 'Prova il nostro metodo! Live aperta a tutti' },
+        { day: 13, type: 'newsletter', time: '11:00', title: 'Newsletter Settimanale', access: 'public' },
+        { day: 13, type: 'dispense', time: '19:00', title: 'Dispensa: Body Language', access: 'members' },
+        
+        // Settimana 3
+        { day: 17, type: 'esercizi', time: '09:00', title: 'Esercizi pratici', access: 'members' },
+        { day: 19, type: 'live', time: '12:00', title: 'Live: Casi Studio', access: 'members' },
+        { day: 20, type: 'newsletter', time: '11:00', title: 'Newsletter Settimanale', access: 'public' },
+        { day: 20, type: 'dispense', time: '19:00', title: 'Dispensa: Desensibilizzazione', access: 'members' },
+        
+        // Settimana 4
+        { day: 24, type: 'esercizi', time: '09:00', title: 'Esercizi finali', access: 'members' },
+        { day: 26, type: 'live', time: '12:00', title: 'Live: Recap Mensile', access: 'members' },
+        { day: 27, type: 'newsletter', time: '11:00', title: 'Newsletter Settimanale', access: 'public' },
+        { day: 27, type: 'dispense', time: '19:00', title: 'Checklist Progressi', access: 'members' }
+      ]
+    };
+
+    // ═══ TEMI MENSILI ═══
+    const monthlyThemes = {
+      '2026-1': {
+        theme: '🐕 Tema del Mese: Fondamenti della Comunicazione',
+        subtitle: 'Impara le basi per capire il linguaggio del tuo cane'
+      },
+      '2026-2': {
+        theme: '🐕 Tema del Mese: Reattività nel Cane',
+        subtitle: 'Impara a gestire l\'iper-reattività con tecniche di comunicazione calma e consapevole'
+      },
+      '2026-3': {
+        theme: '🐕 Tema del Mese: Socializzazione Positiva',
+        subtitle: 'Costruisci relazioni sane con altri cani e persone'
+      }
+    };
+
+    // ═══ STATO CORRENTE ═══
+    let currentDate = new Date(2026, 1, 1); // Febbraio 2026
+
+    // ═══ INIZIALIZZA STORAGE ═══
+    function initStorage() {
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultEvents));
+      }
+    }
+
+    // ═══ OTTIENI EVENTI ═══
+    function getEvents() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : defaultEvents;
+    }
+
+    // ═══ SALVA EVENTI ═══
+    function saveEvents(events) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    }
+
+    // ═══ GENERA URL GOOGLE CALENDAR ═══
+    function generateGoogleCalendarUrl(event, year, month, day) {
+      const eventDate = new Date(year, month, day);
+      const [hours, minutes] = event.time.split(':');
+      eventDate.setHours(parseInt(hours), parseInt(minutes), 0);
+      
+      const endDate = new Date(eventDate);
+      endDate.setHours(endDate.getHours() + 1); // Durata 1 ora
+
+      const formatDate = (date) => {
+        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      };
+
+      const title = encodeURIComponent(event.title);
+      const details = encodeURIComponent(event.description || 'Dog Communication Club - ' + event.title);
+      const dates = `${formatDate(eventDate)}/${formatDate(endDate)}`;
+
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${dates}`;
+    }
+
+    // ═══ RENDERIZZA CALENDARIO ═══
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const monthKey = `${year}-${month + 1}`;
+      
+      // Aggiorna header
+      const monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+                          'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+      document.getElementById('monthName').textContent = monthNames[month];
+      document.getElementById('yearName').textContent = year;
+      
+      // Aggiorna tema
+      const themeData = monthlyThemes[monthKey] || {
+        theme: '🐕 Tema del Mese',
+        subtitle: 'Scopri gli argomenti di questo mese'
+      };
+      document.getElementById('monthTheme').textContent = themeData.theme;
+      document.getElementById('monthSubtitle').textContent = themeData.subtitle;
+
+      // Ottieni eventi del mese
+      const allEvents = getEvents();
+      const monthEvents = allEvents[monthKey] || [];
+
+      // Calcola giorni
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Lun = 0
+
+      const grid = document.getElementById('daysGrid');
+      grid.innerHTML = '';
+
+      // Celle vuote prima del primo giorno
+      for (let i = 0; i < adjustedFirstDay; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'day-cell empty';
+        grid.appendChild(emptyCell);
+      }
+
+      // Giorni del mese
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'day-cell';
+
+        // Numero del giorno
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'day-number';
+        dayNumber.textContent = day;
+        dayCell.appendChild(dayNumber);
+
+        // Eventi del giorno
+        const dayEvents = monthEvents.filter(e => e.day === day);
+        if (dayEvents.length > 0) {
+          const eventsContainer = document.createElement('div');
+          eventsContainer.className = 'events';
+
+          dayEvents.forEach(event => {
+            const eventDiv = document.createElement('div');
+            eventDiv.className = `event ${event.type}`;
+
+            const eventTime = document.createElement('div');
+            eventTime.className = 'event-time';
+            const timeIcon = event.type === 'live' || event.type === 'trial' ? '🎥' : 
+                            event.type === 'newsletter' ? '✉️' : 
+                            event.type === 'dispense' ? '📚' : '⏰';
+            eventTime.textContent = `${timeIcon} ${event.time}`;
+            eventDiv.appendChild(eventTime);
+
+            const eventTitle = document.createElement('div');
+            eventTitle.className = 'event-title';
+            eventTitle.textContent = event.title;
+            eventDiv.appendChild(eventTitle);
+
+            // Actions container
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'event-actions';
+
+            // Badge
+            const badge = document.createElement('span');
+            badge.className = `event-badge ${event.access}`;
+            badge.textContent = event.access === 'members' ? 'Members' : 
+                               event.access === 'trial' ? 'GRATIS' : 'Tutti';
+            actionsDiv.appendChild(badge);
+
+            // Google Calendar button
+            const gcalLink = document.createElement('a');
+            gcalLink.className = 'gcal-btn';
+            gcalLink.href = generateGoogleCalendarUrl(event, year, month, day);
+            gcalLink.target = '_blank';
+            gcalLink.innerHTML = '📅 Agenda';
+            actionsDiv.appendChild(gcalLink);
+
+            eventDiv.appendChild(actionsDiv);
+            eventsContainer.appendChild(eventDiv);
+          });
+
+          dayCell.appendChild(eventsContainer);
+        }
+
+        grid.appendChild(dayCell);
+      }
+    }
+
+    // ═══ NAVIGAZIONE MESI ═══
+    document.getElementById('prevMonth').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    });
+
+    document.getElementById('nextMonth').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    // ═══ INIT ═══
+    initStorage();
+    renderCalendar();
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

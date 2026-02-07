@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dog Club PWA </title>
+    <style>
+        :root {
+            --bg: #F8F9FA;
+            --primary: #A0714F;
+            --accent: #E9E0D6;
+            --text: #2D2D2D;
+            --white: #ffffff;
+            --success: #4CAF50;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            margin: 0; 
+            font-family: -apple-system, system-ui, sans-serif; 
+            background: var(--bg); 
+            color: var(--text);
+            padding-bottom: 120px;
+        }
+
+        /* --- HEADER & WELCOME --- */
+        header {
+            padding: 60px 20px 20px;
+            background: var(--white);
+        }
+        header h1 { margin: 0; font-size: 1.6rem; font-weight: 800; }
+        header p { margin: 5px 0 0; color: #777; }
+
+        /* --- PROSSIMO APPUNTAMENTO (STILE UNOBRAVO) --- */
+        .reminder-card {
+            margin: -10px 20px 20px;
+            background: var(--primary);
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 16px rgba(160, 113, 79, 0.2);
+        }
+        .reminder-info { display: flex; flex-direction: column; }
+        .reminder-date { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+        .reminder-time { font-size: 1.2rem; font-weight: bold; margin: 4px 0; }
+        .reminder-link { color: white; font-size: 0.8rem; text-decoration: underline; }
+        .reminder-icon { font-size: 2rem; }
+
+        /* --- SEZIONI --- */
+        section { margin-top: 30px; padding: 0 20px; }
+        h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; }
+
+        /* --- VIDEO CORREZIONI --- */
+        .video-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+        }
+        .video-icon { 
+            width: 50px; height: 50px; background: var(--accent); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+        }
+        .video-text h3 { margin: 0; font-size: 0.95rem; }
+        .video-text p { margin: 3px 0 0; font-size: 0.8rem; color: #777; }
+
+        /* --- APPUNTI LEZIONI (GRID) --- */
+        .appunti-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .appunto-card {
+            background: var(--white);
+            border-radius: 18px;
+            padding: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid #f0f0f0;
+        }
+        .appunto-preview {
+            height: 100px;
+            background: #fafafa;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center; justify-content: center;
+            border: 1px dashed #ddd;
+            font-size: 1.5rem;
+        }
+
+        /* --- DIARIO PERSONALE (FEED) --- */
+        .diario-item {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+        .diario-item small { color: #999; font-size: 0.75rem; }
+        .diario-item p { margin: 5px 0 0; font-size: 0.9rem; }
+
+        /* --- TAB BAR --- */
+        nav.tab-bar {
+            position: fixed;
+            bottom: 0; width: 100%;
+            height: 85px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .tab-btn { text-align: center; color: #bbb; text-decoration: none; font-size: 0.7rem; }
+        .tab-btn.active { color: var(--primary); }
+        .tab-btn div { font-size: 1.4rem; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <p>Ciao Maria,</p>
+        <h1>Il tuo Club 🐾</h1>
+    </header>
+
+    <div class="reminder-card">
+        <div class="reminder-info">
+            <span class="reminder-date">Prossima Coaching</span>
+            <span class="reminder-time">Domani, ore 15:00</span>
+            <a href="#" class="reminder-link">Apri link di Meet</a>
+        </div>
+        <div class="reminder-icon">🎥</div>
+    </div>
+
+    <section>
+        <h2>Video Correzioni</h2>
+        <div class="video-box" onclick="alert('Carica Video...')">
+            <div class="video-icon">📤</div>
+            <div class="video-text">
+                <h3>Invia un nuovo video</h3>
+                <p>Chiara ti risponderà entro 24h</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Appunti di Chiara</h2>
+        <div class="appunti-grid">
+            <div class="appunto-card">
+                <div class="appunto-preview">📝</div>
+                <div style="font-weight: 600; font-size: 0.85rem;">Segnali Calmanti</div>
+                <div style="font-size: 0.7rem; color: #999;">Aggiornato ieri</div>
+            </div>
+            <div class="appunto-card">
+                <div class="appunto-preview">📝</div>
+                <div style="font-weight: 600; font-size: 0.85rem;">Focus in Passeggiata</div>
+                <div style="font-size: 0.7rem; color: #999;">2 giorni fa</div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Il tuo Diario</h2>
+        <div class="diario-item">
+            <small>OGGI, 14:20</small>
+            <p>Luna ha risposto bene al richiamo con distrazione (ciclista).</p>
+        </div>
+        <div class="diario-item">
+            <small>IERI, 18:30</small>
+            <p>Passeggiata tranquilla, poca tensione al guinzaglio.</p>
+        </div>
+        <button style="width:100%; padding:12px; background:none; border:1px dashed #ccc; border-radius:10px; color:#888;">+ Aggiungi nota al diario</button>
+    </section>
+
+    <nav class="tab-bar">
+        <a href="#" class="tab-btn active"><div>🏠</div>Home</a>
+        <a href="#" class="tab-btn"><div>📖</div>Diario</a>
+        <a href="#" class="tab-btn"><div>📹</div>Video</a>
+        <a href="#" class="tab-btn"><div>👤</div>Profilo</a>
+    </nav>
+
+</body>
+</html>

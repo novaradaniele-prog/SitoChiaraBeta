@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palette Colori - Dog Communication Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* PALETTE ATTUALE */
+    --brown-dark: #5C3D2E;
+    --brown-mid: #7E5A45;
+    --brown-warm: #A0714F;
+    --cream: #F5EDE4;
+    --cream-light: #FAF7F3;
+    --rose: #D4A0A0;
+    --rose-light: #F0D5D5;
+    --rose-dark: #B87878;
+    --sage: #8FA87A;
+    --sage-light: #C5D9B0;
+    --sage-dark: #5F7A4A;
+    --text-dark: #4A2E1F;
+    --text-mid: #7E5A45;
+    --text-light: #A08570;
+    
+    /* COLORI PROPOSTI (System Colors) */
+    --success: #7A9B6E;
+    --error: #C17A7A;
+    --warning: #D4B896;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, var(--cream-light) 0%, var(--cream) 100%);
+    color: var(--text-dark);
+    padding: 60px 20px;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 12px;
+  }
+
+  .header h1 span {
+    color: var(--rose);
+    font-style: italic;
+  }
+
+  .header p {
+    color: var(--text-mid);
+    font-size: 1.1rem;
+    font-weight: 300;
+  }
+
+  .section {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 24px rgba(92,61,46,0.06);
+    border: 1px solid rgba(107,68,48,0.08);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .badge.current {
+    background: var(--sage-light);
+    color: var(--sage-dark);
+  }
+
+  .badge.new {
+    background: var(--rose-light);
+    color: var(--rose-dark);
+  }
+
+  /* COLOR GRID */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .color-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--cream);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .color-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(92,61,46,0.12);
+  }
+
+  .color-swatch {
+    height: 140px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    position: relative;
+  }
+
+  .color-info {
+    padding: 20px;
+  }
+
+  .color-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--brown-dark);
+    margin-bottom: 4px;
+  }
+
+  .color-var {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+  }
+
+  .color-hex {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    background: var(--cream-light);
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  /* EXAMPLES SECTION */
+  .examples-grid {
+    display: grid;
+    gap: 24px;
+  }
+
+  .example-card {
+    background: var(--cream-light);
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid rgba(107,68,48,0.06);
+  }
+
+  .example-title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--brown-dark);
+    margin-bottom: 20px;
+  }
+
+  /* Buttons Example */
+  .buttons-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: var(--rose);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--rose-dark);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: var(--sage);
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: var(--sage-dark);
+    transform: translateY(-2px);
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #6a8a5f;
+    transform: translateY(-2px);
+  }
+
+  .btn-error {
+    background: var(--error);
+    color: white;
+  }
+
+  .btn-error:hover {
+    background: #b06868;
+    transform: translateY(-2px);
+  }
+
+  .btn-warning {
+    background: var(--warning);
+    color: var(--brown-dark);
+  }
+
+  .btn-warning:hover {
+    background: #c9a882;
+    transform: translateY(-2px);
+  }
+
+  /* Alerts Example */
+  .alert {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    border: 1px solid;
+  }
+
+  .alert-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .alert-success {
+    background: rgba(122,155,110,0.1);
+    border-color: var(--success);
+    color: #4a6b3f;
+  }
+
+  .alert-error {
+    background: rgba(193,122,122,0.1);
+    border-color: var(--error);
+    color: #8f4d4d;
+  }
+
+  .alert-warning {
+    background: rgba(212,184,150,0.15);
+    border-color: var(--warning);
+    color: #8b6f4a;
+  }
+
+  .alert-info {
+    background: rgba(143,168,122,0.1);
+    border-color: var(--sage);
+    color: var(--sage-dark);
+  }
+
+  /* Form Example */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--cream);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(212,160,160,0.1);
+  }
+
+  .form-input.success {
+    border-color: var(--success);
+  }
+
+  .form-input.error {
+    border-color: var(--error);
+  }
+
+  .form-message {
+    font-size: 0.85rem;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .form-message.success {
+    color: var(--success);
+  }
+
+  .form-message.error {
+    color: var(--error);
+  }
+
+  /* Badges Example */
+  .badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .status-badge {
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .status-badge.success {
+    background: rgba(122,155,110,0.15);
+    color: var(--success);
+    border-color: var(--success);
+  }
+
+  .status-badge.error {
+    background: rgba(193,122,122,0.15);
+    color: var(--error);
+    border-color: var(--error);
+  }
+
+  .status-badge.warning {
+    background: rgba(212,184,150,0.15);
+    color: #8b6f4a;
+    border-color: var(--warning);
+  }
+
+  .status-badge.info {
+    background: rgba(143,168,122,0.15);
+    color: var(--sage-dark);
+    border-color: var(--sage);
+  }
+
+  /* Typography Examples */
+  .typography-example {
+    margin-bottom: 20px;
+  }
+
+  .typography-example h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+  }
+
+  .typography-example h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--brown-mid);
+    margin-bottom: 8px;
+  }
+
+  .typography-example p {
+    color: var(--text-mid);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .typography-example .highlight {
+    color: var(--rose);
+    font-style: italic;
+  }
+
+  /* Comparison */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .comparison-side {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    border: 2px solid;
+  }
+
+  .comparison-side.before {
+    border-color: var(--sage-light);
+  }
+
+  .comparison-side.after {
+    border-color: var(--rose-light);
+  }
+
+  .comparison-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+  }
+
+  .comparison-side.before .comparison-label {
+    color: var(--sage-dark);
+  }
+
+  .comparison-side.after .comparison-label {
+    color: var(--rose-dark);
+  }
+
+  @media (max-width: 768px) {
+    .color-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .comparison {
+      grid-template-columns: 1fr;
+    }
+
+    .section {
+      padding: 28px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Palette Colori <span>Dog Communication Club</span></h1>
+    <p>Sistema cromatico completo per brand identity e UI</p>
+  </div>
+
+  <!-- CURRENT PALETTE -->
+  <div class="section">
+    <span class="badge current">Palette Attuale</span>
+    <h2 class="section-title">Colori Principali</h2>
+    <p class="section-subtitle">La palette base del brand, calda e accogliente</p>
+    
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--brown-dark); color: white;">🐕</div>
+        <div class="color-info">
+          <div class="color-name">Brown Dark</div>
+          <div class="color-var">--brown-dark</div>
+          <div class="color-hex">#5C3D2E</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--brown-mid); color: white;">🐕</div>
+        <div class="color-info">
+          <div class="color-name">Brown Mid</div>
+          <div class="color-var">--brown-mid</div>
+          <div class="color-hex">#7E5A45</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--brown-warm); color: white;">🐕</div>
+        <div class="color-info">
+          <div class="color-name">Brown Warm</div>
+          <div class="color-var">--brown-warm</div>
+          <div class="color-hex">#A0714F</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--rose); color: white;">💗</div>
+        <div class="color-info">
+          <div class="color-name">Rose</div>
+          <div class="color-var">--rose</div>
+          <div class="color-hex">#D4A0A0</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--rose-light); color: var(--brown-dark);">💗</div>
+        <div class="color-info">
+          <div class="color-name">Rose Light</div>
+          <div class="color-var">--rose-light</div>
+          <div class="color-hex">#F0D5D5</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--rose-dark); color: white;">💗</div>
+        <div class="color-info">
+          <div class="color-name">Rose Dark</div>
+          <div class="color-var">--rose-dark</div>
+          <div class="color-hex">#B87878</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--sage); color: white;">🌿</div>
+        <div class="color-info">
+          <div class="color-name">Sage</div>
+          <div class="color-var">--sage</div>
+          <div class="color-hex">#8FA87A</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--sage-light); color: var(--brown-dark);">🌿</div>
+        <div class="color-info">
+          <div class="color-name">Sage Light</div>
+          <div class="color-var">--sage-light</div>
+          <div class="color-hex">#C5D9B0</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--sage-dark); color: white;">🌿</div>
+        <div class="color-info">
+          <div class="color-name">Sage Dark</div>
+          <div class="color-var">--sage-dark</div>
+          <div class="color-hex">#5F7A4A</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--cream); color: var(--brown-dark);">☁️</div>
+        <div class="color-info">
+          <div class="color-name">Cream</div>
+          <div class="color-var">--cream</div>
+          <div class="color-hex">#F5EDE4</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--cream-light); color: var(--brown-dark);">☁️</div>
+        <div class="color-info">
+          <div class="color-name">Cream Light</div>
+          <div class="color-var">--cream-light</div>
+          <div class="color-hex">#FAF7F3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSED SYSTEM COLORS -->
+  <div class="section">
+    <span class="badge new">Colori Proposti</span>
+    <h2 class="section-title">System Colors</h2>
+    <p class="section-subtitle">Colori di sistema per feedback e stati dell'interfaccia</p>
+    
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--success); color: white;">✓</div>
+        <div class="color-info">
+          <div class="color-name">Success</div>
+          <div class="color-var">--success</div>
+          <div class="color-hex">#7A9B6E</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--error); color: white;">✕</div>
+        <div class="color-info">
+          <div class="color-name">Error</div>
+          <div class="color-var">--error</div>
+          <div class="color-hex">#C17A7A</div>
+        </div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-swatch" style="background: var(--warning); color: var(--brown-dark);">⚠</div>
+        <div class="color-info">
+          <div class="color-name">Warning</div>
+          <div class="color-var">--warning</div>
+          <div class="color-hex">#D4B896</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES: BUTTONS -->
+  <div class="section">
+    <h2 class="section-title">Esempi: Buttons</h2>
+    <p class="section-subtitle">Come i colori vengono usati nei componenti interattivi</p>
+    
+    <div class="example-card">
+      <div class="example-title">Azioni Principali</div>
+      <div class="buttons-row">
+        <button class="btn btn-primary">Prenota Ora</button>
+        <button class="btn btn-secondary">Scopri di più</button>
+        <button class="btn btn-success">✓ Confermato</button>
+        <button class="btn btn-error">✕ Annulla</button>
+        <button class="btn btn-warning">⚠ Attenzione</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES: ALERTS -->
+  <div class="section">
+    <h2 class="section-title">Esempi: Notifiche e Alert</h2>
+    <p class="section-subtitle">Feedback visivo per le azioni dell'utente</p>
+    
+    <div class="example-card">
+      <div class="alert alert-success">
+        <span class="alert-icon">✓</span>
+        <span><strong>Prenotazione confermata!</strong> La tua sessione è stata registrata con successo.</span>
+      </div>
+      
+      <div class="alert alert-error">
+        <span class="alert-icon">✕</span>
+        <span><strong>Errore di validazione</strong> - Verifica che tutti i campi siano compilati correttamente.</span>
+      </div>
+      
+      <div class="alert alert-warning">
+        <span class="alert-icon">⚠</span>
+        <span><strong>Attenzione:</strong> Questo orario sta per essere prenotato da un altro utente.</span>
+      </div>
+      
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ</span>
+        <span><strong>Suggerimento:</strong> Riceverai un promemoria via email 24 ore prima della sessione.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES: FORMS -->
+  <div class="section">
+    <h2 class="section-title">Esempi: Form Validation</h2>
+    <p class="section-subtitle">Stati di validazione nei form</p>
+    
+    <div class="example-card">
+      <div class="form-group">
+        <label class="form-label">Email (corretta)</label>
+        <input type="email" class="form-input success" value="chiara@dogclub.it">
+        <div class="form-message success">✓ Email valida</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Telefono (errore)</label>
+        <input type="tel" class="form-input error" value="123">
+        <div class="form-message error">✕ Inserisci un numero di telefono valido</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nome del cane</label>
+        <input type="text" class="form-input" placeholder="Es. Luna">
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES: BADGES -->
+  <div class="section">
+    <h2 class="section-title">Esempi: Status Badges</h2>
+    <p class="section-subtitle">Indicatori di stato per dashboard e liste</p>
+    
+    <div class="example-card">
+      <div class="badges-row">
+        <span class="status-badge success">✓ Confermato</span>
+        <span class="status-badge error">✕ Cancellato</span>
+        <span class="status-badge warning">⏳ In Attesa</span>
+        <span class="status-badge info">📅 Programmato</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON: BEFORE & AFTER -->
+  <div class="section">
+    <h2 class="section-title">Confronto: Prima e Dopo</h2>
+    <p class="section-subtitle">Come i nuovi colori migliorano l'esperienza utente</p>
+    
+    <div class="comparison">
+      <div class="comparison-side before">
+        <div class="comparison-label">❌ Senza System Colors</div>
+        <div style="padding: 16px; background: var(--cream-light); border-radius: 12px; margin-bottom: 12px;">
+          <strong style="color: var(--text-dark);">Prenotazione confermata</strong>
+          <p style="color: var(--text-mid); font-size: 0.9rem; margin-top: 6px;">La tua sessione è stata registrata</p>
+        </div>
+        <div style="padding: 16px; background: var(--cream-light); border-radius: 12px;">
+          <strong style="color: var(--text-dark);">Errore di validazione</strong>
+          <p style="color: var(--text-mid); font-size: 0.9rem; margin-top: 6px;">Controlla i dati inseriti</p>
+        </div>
+      </div>
+
+      <div class="comparison-side after">
+        <div class="comparison-label">✓ Con System Colors</div>
+        <div class="alert alert-success">
+          <span class="alert-icon">✓</span>
+          <div>
+            <strong>Prenotazione confermata</strong>
+            <p style="margin: 0; margin-top: 4px; opacity: 0.9;">La tua sessione è stata registrata</p>
+          </div>
+        </div>
+        <div class="alert alert-error">
+          <span class="alert-icon">✕</span>
+          <div>
+            <strong>Errore di validazione</strong>
+            <p style="margin: 0; margin-top: 4px; opacity: 0.9;">Controlla i dati inseriti</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div class="section">
+    <h2 class="section-title">Tipografia & Colori</h2>
+    <p class="section-subtitle">Come testi e colori lavorano insieme</p>
+    
+    <div class="example-card">
+      <div class="typography-example">
+        <h2>Il tuo cane <span class="highlight">ti sta parlando</span></h2>
+        <h3>Ogni comportamento è una forma di comunicazione</h3>
+        <p>
+          Nel Dog Communication Club imparerai a interpretare i segnali del tuo cane, 
+          costruendo una relazione basata sulla <span class="highlight">comprensione reciproca</span> 
+          e sulla fiducia. Non si tratta di addestrarlo, ma di capirlo davvero.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMMENDATION -->
+  <div class="section" style="background: linear-gradient(135deg, var(--sage-light), var(--rose-light)); border: none;">
+    <h2 class="section-title">💡 Raccomandazione Finale</h2>
+    <p style="color: var(--text-dark); font-size: 1.05rem; line-height: 1.8; margin-bottom: 20px;">
+      I tre colori proposti (<strong>Success, Error, Warning</strong>) completano perfettamente 
+      la palette esistente, mantenendo la stessa <strong>temperatura cromatica calda</strong> 
+      e lo <strong>stile naturale</strong> del brand.
+    </p>
+    <p style="color: var(--text-dark); font-size: 1.05rem; line-height: 1.8;">
+      <strong>Quando usarli:</strong><br>
+      ✓ Form di prenotazione con validazione<br>
+      ✓ Dashboard per gestire le sessioni<br>
+      ✓ Notifiche e conferme<br>
+      ✓ Stati degli appuntamenti<br>
+      <br>
+      <strong>Quando NON usarli:</strong><br>
+      • Landing page semplici senza interazioni<br>
+      • Contenuti puramente informativi<br>
+      • Se vuoi mantenere un design ultra-minimalista
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>

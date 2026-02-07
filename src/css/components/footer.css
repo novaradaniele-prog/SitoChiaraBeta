@@ -1,0 +1,60 @@
+/* ═══════════════════════════════════════════════════════════════
+   DOG COMMUNICATION CLUB - Footer
+   ═══════════════════════════════════════════════════════════════ */
+
+.footer {
+  background: #3E2718;
+  padding: 48px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer__logo {
+  font-family: var(--font-heading);
+  color: var(--cream);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.footer__logo span {
+  color: var(--rose);
+}
+
+.footer__copyright {
+  color: rgba(245, 237, 228, 0.3);
+  font-size: 0.75rem;
+}
+
+.footer__links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer__link {
+  color: rgba(245, 237, 228, 0.4);
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: color var(--transition-normal);
+}
+
+.footer__link:hover {
+  color: var(--rose);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .footer {
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer__links {
+    justify-content: center;
+  }
+}

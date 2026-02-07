@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════
+   DOG COMMUNICATION CLUB - Header / Navigation
+   ═══════════════════════════════════════════════════════════════ */
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: rgba(92, 61, 46, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__logo {
+  font-family: var(--font-heading);
+  color: var(--cream);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.header__logo span {
+  color: var(--rose);
+}
+
+.header__nav {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.header__nav-link {
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  opacity: 0.8;
+  transition: opacity var(--transition-normal);
+}
+
+.header__nav-link:hover {
+  opacity: 1;
+}
+
+.header__cta {
+  background: var(--rose);
+  color: var(--brown-dark);
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition-normal), transform var(--transition-fast);
+}
+
+.header__cta:hover {
+  background: var(--rose-dark);
+  transform: scale(1.03);
+}
+
+/* Mobile Menu Toggle */
+.header__menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.header__menu-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--cream);
+  transition: all var(--transition-normal);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .header {
+    padding: 16px 24px;
+  }
+
+  .header__nav {
+    display: none;
+  }
+
+  .header__menu-toggle {
+    display: flex;
+  }
+
+  /* Mobile menu open state */
+  .header--menu-open .header__nav {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--brown-dark);
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .header--menu-open .header__menu-toggle span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .header--menu-open .header__menu-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .header--menu-open .header__menu-toggle span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+}

@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dog Communication Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-dark: #5C3D2E;
+    --brown-mid: #7E5A45;
+    --brown-warm: #A0714F;
+    --cream: #F5EDE4;
+    --cream-light: #FAF7F3;
+    --rose: #D4A0A0;
+    --rose-light: #F0D5D5;
+    --rose-dark: #B87878;
+    --sage: #8FA87A;
+    --sage-light: #C5D9B0;
+    --sage-dark: #5F7A4A;
+    --text-dark: #4A2E1F;
+    --text-mid: #7E5A45;
+    --text-light: #A08570;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(92,61,46,0.95);
+    backdrop-filter: blur(8px);
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream); font-size: 1.3rem; font-weight: 700;
+  }
+  .nav-logo span { color: var(--rose); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--cream); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    opacity: 0.8; transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta {
+    background: var(--rose); color: var(--brown-dark);
+    border: none; padding: 10px 24px; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--rose-dark); transform: scale(1.03); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; background: var(--brown-dark);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 120px 40px 80px;
+  }
+  .hero::before {
+    content: ''; position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,160,0.12) 0%, transparent 70%);
+  }
+  .hero::after {
+    content: ''; position: absolute;
+    bottom: -150px; left: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(143,168,122,0.1) 0%, transparent 70%);
+  }
+  .hero-paw {
+    position: absolute; opacity: 0.04; font-size: 300px;
+    bottom: -40px; right: 5%; color: var(--cream); pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    text-align: center; max-width: 780px;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(212,160,160,0.15);
+    border: 1px solid rgba(212,160,160,0.35);
+    color: var(--rose); padding: 8px 20px; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 30px;
+    animation: fadeDown 0.8s ease both;
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    font-size: clamp(2.6rem, 5.5vw, 4rem);
+    font-weight: 700; line-height: 1.2;
+    margin-bottom: 28px;
+    animation: fadeUp 0.9s ease 0.15s both;
+  }
+  .hero h1 em { font-style: italic; color: var(--rose); }
+  .hero-sub {
+    color: rgba(245,237,228,0.58);
+    font-size: 1.05rem; font-weight: 300;
+    line-height: 1.9; max-width: 600px;
+    margin: 0 auto 42px;
+    animation: fadeUp 0.9s ease 0.3s both;
+  }
+  .hero-sub-line {
+    display: block; margin-top: 20px;
+    color: rgba(245,237,228,0.72);
+    font-size: 0.92rem; font-weight: 400;
+    font-style: italic;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-btn {
+    display: inline-block; background: var(--rose);
+    color: var(--brown-dark); text-decoration: none;
+    padding: 16px 42px; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 1.3px; text-transform: uppercase;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 6px 30px rgba(212,160,160,0.25);
+    animation: fadeUp 0.9s ease 0.45s both;
+  }
+  .hero-btn:hover {
+    background: var(--rose-dark); transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(212,160,160,0.35);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 36px; left: 50%;
+    transform: translateX(-50%);
+    color: rgba(245,237,228,0.3);
+    font-size: 0.7rem; letter-spacing: 2px;
+    text-transform: uppercase; text-align: center; z-index: 1;
+  }
+  .hero-scroll::after {
+    content: ''; display: block; width: 1px; height: 40px;
+    background: rgba(245,237,228,0.2);
+    margin: 10px auto 0;
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(0.4); opacity: 0.3; }
+    50%      { transform: scaleY(1);   opacity: 0.8; }
+  }
+
+  /* ─── COMMONS ─── */
+  section { padding: 100px 40px; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--sage-dark); margin-bottom: 12px; text-align: center;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+    font-weight: 700; color: var(--brown-dark);
+    text-align: center; line-height: 1.3;
+    max-width: 650px; margin: 0 auto 16px;
+  }
+  .section-title em { font-style: italic; color: var(--brown-warm); }
+  .section-desc {
+    text-align: center; color: var(--text-mid);
+    font-size: 0.95rem; line-height: 1.8;
+    max-width: 580px; margin: 0 auto 60px; font-weight: 300;
+  }
+
+  /* ─── COSA IMPARI ─── */
+  .learn { background: var(--cream-light); }
+  .learn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px; max-width: 1100px; margin: 0 auto;
+  }
+  .learn-card {
+    background: white; border-radius: 20px;
+    padding: 36px 28px;
+    border: 1px solid rgba(107,68,48,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .learn-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--rose), var(--sage-light));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .learn-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(59,36,25,0.08);
+  }
+  .learn-card:hover::before { opacity: 1; }
+  .learn-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 20px;
+  }
+  .icon-rose  { background: var(--rose-light); }
+  .icon-sage  { background: var(--sage-light); }
+  .icon-cream { background: #E8DDD0; }
+  .icon-brown { background: rgba(139,94,60,0.12); }
+  .learn-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; color: var(--brown-dark);
+    margin-bottom: 10px; font-weight: 600;
+  }
+  .learn-card p {
+    color: var(--text-mid); font-size: 0.88rem;
+    line-height: 1.7; font-weight: 300;
+  }
+
+  /* ─── COSA TROVI ─── */
+  .cosaktrovi { background: var(--cream); }
+  .cosaktrovi-wrap {
+    max-width: 960px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 56px; align-items: center;
+  }
+  .cosaktrovi-text .section-label { text-align: left; }
+  .cosaktrovi-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    color: var(--brown-dark); font-weight: 700;
+    line-height: 1.3; margin-bottom: 28px;
+  }
+  .cosaktrovi-text h2 em { font-style: italic; color: var(--rose-dark); }
+  .cosaktrovi-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+  .cosaktrovi-list li {
+    display: flex; align-items: flex-start; gap: 16px;
+    font-size: 0.92rem; color: var(--text-mid);
+    line-height: 1.7; font-weight: 300;
+  }
+  .cosaktrovi-list .ck {
+    width: 26px; height: 26px; min-width: 26px;
+    border-radius: 50%; background: var(--sage-light);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sage-dark); font-size: 0.75rem; font-weight: 700;
+    margin-top: 2px;
+  }
+  .cosaktrovi-visual {
+    background: var(--brown-dark); border-radius: 28px;
+    padding: 52px 40px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cosaktrovi-visual::before {
+    content: ''; position: absolute;
+    top: -70px; right: -70px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,160,0.15) 0%, transparent 70%);
+  }
+  .cosaktrovi-visual::after {
+    content: ''; position: absolute;
+    bottom: -50px; left: -50px;
+    width: 180px; height: 180px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(143,168,122,0.1) 0%, transparent 70%);
+  }
+  .cv-icon { font-size: 2.8rem; margin-bottom: 22px; position: relative; z-index: 1; }
+  .cosaktrovi-visual h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream); font-size: 1.25rem;
+    font-weight: 600; margin-bottom: 14px;
+    line-height: 1.4; position: relative; z-index: 1;
+  }
+  .cosaktrovi-visual p {
+    color: rgba(245,237,228,0.48); font-size: 0.83rem;
+    line-height: 1.8; font-weight: 300;
+    position: relative; z-index: 1;
+  }
+
+  /* ─── PER CHI È ─── */
+  .forwho { background: var(--brown-dark); position: relative; padding: 100px 40px; }
+  .forwho-inner { max-width: 780px; margin: 0 auto; }
+  .forwho-intro { text-align: center; margin-bottom: 56px; }
+  .forwho-intro-sub {
+    color: rgba(245,237,228,0.5); font-size: 0.95rem;
+    line-height: 1.8; font-weight: 300;
+    margin-top: 18px; margin-bottom: 32px;
+  }
+  .forwho-intro-lead {
+    color: rgba(245,237,228,0.75); font-size: 1rem; font-weight: 500;
+  }
+  .forwho-grid { display: flex; flex-direction: column; gap: 0; margin-bottom: 56px; }
+  .forwho-item {
+    display: flex; align-items: center; gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(245,237,228,0.08);
+    transition: padding-left 0.3s;
+  }
+  .forwho-item:first-child { border-top: 1px solid rgba(245,237,228,0.08); }
+  .forwho-item:hover { padding-left: 12px; }
+  .forwho-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--rose); opacity: 0.5;
+    min-width: 42px; text-align: center;
+    transition: opacity 0.3s;
+  }
+  .forwho-item:hover .forwho-number { opacity: 1; }
+  .forwho-item p {
+    color: rgba(245,237,228,0.65); font-size: 1.05rem;
+    font-weight: 300; line-height: 1.6; transition: color 0.3s;
+  }
+  .forwho-item:hover p { color: rgba(245,237,228,0.9); }
+  .forwho-item p strong { color: var(--cream); font-weight: 500; }
+  .forwho-reveal {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 28px;
+  }
+  .forwho-reveal-line {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,160,160,0.4), transparent);
+  }
+  .forwho-reveal-content { text-align: center; }
+  .forwho-reveal-arrow {
+    color: var(--cream); font-size: 1.25rem;
+    font-weight: 400; line-height: 2;
+    font-family: 'Playfair Display', serif;
+  }
+  .forwho-reveal-arrow strong { color: var(--rose); font-weight: 600; }
+
+  /* ─── PRICING ─── */
+  .pricing { background: var(--cream); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px; max-width: 1050px; margin: 0 auto;
+  }
+  .pricing-card {
+    background: white; border-radius: 24px;
+    padding: 40px 32px 36px;
+    border: 1px solid rgba(107,68,48,0.1);
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex; flex-direction: column;
+  }
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 50px rgba(59,36,25,0.1);
+  }
+  .pricing-card.featured {
+    border-color: var(--rose);
+    background: var(--brown-dark); color: var(--cream);
+  }
+  .pricing-card.featured .pricing-name   { color: var(--cream); }
+  .pricing-card.featured .pricing-desc   { color: rgba(245,237,228,0.5); }
+  .pricing-card.featured .pricing-price  { color: var(--cream); }
+  .pricing-card.featured .pricing-period { color: rgba(245,237,228,0.45); }
+  .pricing-card.featured .pricing-divider { background: rgba(245,237,228,0.15); }
+  .pricing-card.featured .pricing-feature { color: rgba(245,237,228,0.7); }
+  .pricing-card.featured .feature-check   { color: var(--rose); }
+  .pricing-badge {
+    position: absolute; top: -14px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--rose); color: var(--brown-dark);
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 6px 18px; border-radius: 50px; white-space: nowrap;
+  }
+  .pricing-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--brown-dark); margin-bottom: 6px;
+  }
+  .pricing-desc {
+    font-size: 0.82rem; color: var(--text-light);
+    margin-bottom: 24px; font-weight: 300; line-height: 1.5;
+  }
+  .pricing-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem; font-weight: 700;
+    color: var(--brown-dark); line-height: 1;
+  }
+  .pricing-price sup { font-size: 1rem; vertical-align: super; font-weight: 400; }
+  .pricing-period { font-size: 0.78rem; color: var(--text-light); margin-bottom: 28px; }
+  .pricing-divider { height: 1px; background: rgba(107,68,48,0.1); margin-bottom: 24px; }
+  .pricing-features { list-style: none; margin-bottom: 32px; flex-grow: 1; }
+  .pricing-feature {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 0.87rem; color: var(--text-mid);
+    line-height: 1.5; padding: 8px 0;
+  }
+  .feature-check { color: var(--sage-dark); font-size: 0.9rem; flex-shrink: 0; margin-top: 2px; }
+  .pricing-btn {
+    display: block; width: 100%; padding: 14px; border-radius: 50px;
+    border: 2px solid var(--brown-warm);
+    background: transparent; color: var(--brown-warm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .pricing-btn:hover { background: var(--brown-warm); color: white; }
+  .pricing-card.featured .pricing-btn {
+    border-color: var(--rose); background: var(--rose); color: var(--brown-dark);
+  }
+  .pricing-card.featured .pricing-btn:hover {
+    background: var(--rose-dark); border-color: var(--rose-dark); color: white;
+  }
+
+  /* ─── TOGGLE ─── */
+  .toggle-wrap { cursor: pointer; }
+  .toggle-track {
+    width: 52px; height: 28px; border-radius: 50px;
+    background: #D4C4B0; position: relative; transition: background 0.35s;
+  }
+  .toggle-track.active { background: var(--sage); }
+  .toggle-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: white; position: absolute; top: 3px; left: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: left 0.35s;
+  }
+  .toggle-thumb.active { left: 27px; }
+  .annual-tag {
+    font-size: 0.7rem; font-weight: 600;
+    background: var(--sage-light); color: var(--sage-dark);
+    padding: 4px 10px; border-radius: 50px;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .annual-tag.visible { opacity: 1; }
+
+  /* ─── ALANO ─── */
+  .alano-card {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--cream), var(--cream)) padding-box,
+                linear-gradient(135deg, var(--brown-warm), var(--rose), var(--sage)) border-box;
+  }
+  .alano-card:hover { box-shadow: 0 16px 50px rgba(92,61,46,0.15); }
+  .alano-badge {
+    background: linear-gradient(135deg, var(--brown-warm), var(--rose-dark));
+    color: white !important;
+  }
+  .alano-btn {
+    border-color: var(--brown-warm) !important;
+    color: var(--brown-warm) !important;
+    background: transparent !important;
+  }
+  .alano-btn:hover { background: var(--brown-warm) !important; color: white !important; }
+
+  /* ─── TESTIMONIANZE ─── */
+  .testimonials { background: var(--cream-light); }
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px; max-width: 1050px; margin: 0 auto;
+  }
+  .testimonial-card {
+    background: white; border-radius: 20px; padding: 30px;
+    border: 1px solid rgba(107,68,48,0.07); transition: transform 0.3s;
+  }
+  .testimonial-card:hover { transform: translateY(-3px); }
+  .testimonial-stars { color: var(--rose-dark); font-size: 0.85rem; letter-spacing: 2px; margin-bottom: 16px; }
+  .testimonial-text {
+    font-size: 0.88rem; color: var(--text-mid);
+    line-height: 1.75; font-style: italic;
+    margin-bottom: 22px; font-weight: 300;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 14px; }
+  .testimonial-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; font-weight: 600; color: white;
+  }
+  .av-rose  { background: var(--rose-dark); }
+  .av-sage  { background: var(--sage-dark); }
+  .av-brown { background: var(--brown-warm); }
+  .testimonial-info h5 { font-size: 0.88rem; color: var(--brown-dark); font-weight: 600; }
+  .testimonial-info span { font-size: 0.76rem; color: var(--text-light); }
+
+  /* ─── FAQ ─── */
+  .faq-section { padding: 100px 40px; }
+  .faq { max-width: 780px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid rgba(107,68,48,0.12); }
+  .faq-question {
+    width: 100%; background: none; border: none; text-align: left;
+    padding: 22px 0; display: flex;
+    justify-content: space-between; align-items: center;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    color: var(--brown-dark); transition: color 0.3s; gap: 16px;
+  }
+  .faq-question:hover { color: var(--brown-warm); }
+  .faq-icon {
+    font-size: 1.2rem; color: var(--text-light);
+    transition: transform 0.3s, color 0.3s; flex-shrink: 0;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--rose-dark); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+  .faq-item.open .faq-answer { max-height: 240px; padding-bottom: 22px; }
+  .faq-answer p {
+    font-size: 0.88rem; color: var(--text-mid);
+    line-height: 1.8; font-weight: 300;
+  }
+
+  /* ─── FAQ CONTATTO ─── */
+  .faq-contact {
+    margin-top: 52px; padding: 38px 34px; border-radius: 22px;
+    background: var(--brown-dark); text-align: center;
+  }
+  .faq-contact h4 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream); font-size: 1.15rem;
+    font-weight: 600; margin-bottom: 10px;
+  }
+  .faq-contact p {
+    color: rgba(245,237,228,0.5); font-size: 0.84rem;
+    line-height: 1.8; font-weight: 300; margin-bottom: 24px;
+  }
+  .contact-form {
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 480px; margin: 0 auto;
+  }
+  .contact-input, .contact-textarea {
+    width: 100%; padding: 14px 18px;
+    border-radius: 12px; border: 1px solid rgba(245,237,228,0.2);
+    background: rgba(245,237,228,0.08);
+    color: var(--cream); font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; outline: none;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .contact-input::placeholder, .contact-textarea::placeholder {
+    color: rgba(245,237,228,0.35);
+  }
+  .contact-input:focus, .contact-textarea:focus {
+    border-color: var(--rose);
+    background: rgba(245,237,228,0.12);
+  }
+  .contact-textarea {
+    resize: vertical; min-height: 100px;
+  }
+  .contact-btn {
+    width: 100%; padding: 14px;
+    border-radius: 50px; border: none;
+    background: var(--rose); color: var(--brown-dark);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s, transform 0.2s;
+    margin-top: 6px;
+  }
+  .contact-btn:hover {
+    background: var(--rose-dark);
+    transform: translateY(-1px);
+  }
+  .contact-btn:disabled {
+    opacity: 0.6; cursor: not-allowed;
+  }
+  .contact-success, .contact-error {
+    font-size: 0.82rem; margin-top: 12px;
+    padding: 10px 16px; border-radius: 8px;
+    font-weight: 400;
+  }
+  .contact-success {
+    background: rgba(143,168,122,0.15);
+    color: var(--sage-light);
+    border: 1px solid rgba(143,168,122,0.3);
+  }
+  .contact-error {
+    background: rgba(212,160,160,0.15);
+    color: var(--rose-light);
+    border: 1px solid rgba(212,160,160,0.3);
+  }
+
+  /* ─── CTA FINALE ─── */
+  .cta-final {
+    background: var(--brown-dark); text-align: center;
+    padding: 120px 40px; position: relative; overflow: hidden;
+  }
+  .cta-final::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,160,0.08) 0%, transparent 65%);
+  }
+  .cta-final h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.3;
+    max-width: 600px; margin: 0 auto 16px;
+    position: relative; z-index: 1;
+  }
+  .cta-final h2 em { font-style: italic; color: var(--rose); }
+  .cta-final p {
+    color: rgba(245,237,228,0.5); font-size: 0.95rem;
+    max-width: 480px; margin: 0 auto 40px;
+    line-height: 1.7; font-weight: 300;
+    position: relative; z-index: 1;
+  }
+  .cta-final a {
+    display: inline-block; background: var(--rose);
+    color: var(--brown-dark); text-decoration: none;
+    padding: 16px 46px; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 1.3px; text-transform: uppercase;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 6px 30px rgba(212,160,160,0.25);
+    position: relative; z-index: 1;
+  }
+  .cta-final a:hover {
+    background: var(--rose-dark); transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(212,160,160,0.35);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #3E2718; padding: 48px 40px;
+    display: flex; flex-wrap: wrap;
+    justify-content: space-between; align-items: center; gap: 20px;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream); font-size: 1.1rem; font-weight: 700;
+  }
+  .footer-logo span { color: var(--rose); }
+  footer p { color: rgba(245,237,228,0.3); font-size: 0.75rem; }
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a {
+    color: rgba(245,237,228,0.4); text-decoration: none;
+    font-size: 0.75rem; transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--rose); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    .faq-section { padding: 70px 24px; }
+    .hero { padding: 100px 24px 70px; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+    .testimonial-grid { grid-template-columns: 1fr; }
+    .cosaktrovi-wrap { grid-template-columns: 1fr; gap: 36px; }
+    footer { text-align: center; justify-content: center; }
+    .footer-links { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Dog Communication <span>Club</span></div>
+  <ul class="nav-links">
+    <li><a href="#learn">Cosa impari</a></li>
+    <li><a href="#cosaktrovi">Cosa trovi</a></li>
+    <li><a href="#forwho">Per chi è</a></li>
+    <li><a href="#pricing">Percorsi</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Entra nel Club</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🐾 La prima Scuola Online di Educazione Cinofila</div>
+    <h1>Impara a comprendere e comunicare<br><em>davvero</em> con il tuo cane.</h1>
+    <p class="hero-sub">
+      Un metodo scientifico e pratico per costruire un rapporto di fiducia profonda con il tuo cane.<br>
+      Senza urla. Senza punizioni. Solo comunicazione vera.
+      <span class="hero-sub-line">Ogni lezione è progettata per applicarsi da subito nella vita di tutti i giorni, con il tuo cane, nella tua casa.</span>
+    </p>
+    <a href="#pricing" class="hero-btn">Scopri i Percorsi</a>
+  </div>
+  <div class="hero-scroll">Scorre</div>
+  <div class="hero-paw">🐾</div>
+</section>
+
+<!-- COSA IMPARI -->
+<section class="learn" id="learn">
+  <div class="section-label">Cosa impari</div>
+  <h2 class="section-title">Dalla teoria alla <em>pratica quotidiana</em></h2>
+  <p class="section-desc">Ogni lezione è progettata per applicarsi da subito nella vita di tutti i giorni, con il tuo cane, nella tua casa.</p>
+  <div class="learn-grid">
+    <div class="learn-card">
+      <div class="learn-icon icon-rose">🧠</div>
+      <h4>Psicologia Canina</h4>
+      <p>Capisci come il tuo cane percepisce il mondo, cosa lo motiva e perché adotta certi comportamenti.</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-icon icon-sage">🗣️</div>
+      <h4>Linguaggio Corporeo</h4>
+      <p>Impara a leggere i segnali del tuo cane: dalla coda agli orecchi, ogni gesto ha un significato.</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-icon icon-cream">🎯</div>
+      <h4>Segnali e Routine</h4>
+      <p>Costruisci routine giornaliere efficaci e insegna segnali chiari per guidare il cane efficacemente.</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-icon icon-brown">🤝</div>
+      <h4>Gestione dello Stress</h4>
+      <p>Riconosci e riduci le situazioni di ansia nel tuo cane, creando un ambiente sereno e sicuro.</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-icon icon-rose">🏡</div>
+      <h4>Convivenza in Casa</h4>
+      <p>Risolvi i problemi più comuni: abbaiare eccessivo, distruzione di oggetti, comportamenti in tavola.</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-icon icon-sage">🌳</div>
+      <h4>Socializzazione</h4>
+      <p>Guida il tuo cane nelle interazioni con altri cani e persone in modo sicuro e positivo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COSA TROVI -->
+<section class="cosaktrovi" id="cosaktrovi">
+  <div class="cosaktrovi-wrap">
+    <div class="cosaktrovi-text">
+      <div class="section-label">Cosa trovi</div>
+      <h2>Contenuti pensati per <em>cambiare davvero</em> il modo in cui ti rapporti col tuo cane.</h2>
+      <ul class="cosaktrovi-list">
+        <li>
+          <span class="ck">✓</span>
+          <span>Contenuti educativi sulla <strong>comunicazione cane–uomo</strong> e <strong>cane–cane</strong>, approfonditi e scientificamente fondati.</span>
+        </li>
+        <li>
+          <span class="ck">✓</span>
+          <span><strong>Spiegazioni chiare, non semplificate.</strong> Ogni concetto viene esplorato in profondità, senza scorciatoie.</span>
+        </li>
+        <li>
+          <span class="ck">✓</span>
+          <span><strong>Esempi reali e quotidiani.</strong> Situazioni che succedono davvero, con soluzioni applicabili da subito.</span>
+        </li>
+        <li>
+          <span class="ck">✓</span>
+          <span>Un <strong>approccio etico e rispettoso</strong> verso il cane, al centro di tutto il percorso.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="cosaktrovi-visual">
+      <div class="cv-icon">🐾</div>
+      <h3>Comunicazione vera.<br>Non comandi.</h3>
+      <p>L'obiettivo non è ottenere obbedienza.<br>È costruire un dialogo.<br><br>Quando il cane capisce ed è capito,<br>tutto il resto segue da solo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PER CHI È -->
+<section class="forwho" id="forwho">
+  <div class="forwho-inner">
+    <div class="forwho-intro">
+      <div class="section-label" style="color: var(--rose);">Per chi è</div>
+      <h2 class="section-title" style="color: var(--cream); max-width:700px;">Il Dog Communication Club è per te,<br><em style="color: var(--rose);">se ti riconosci.</em></h2>
+      <p class="forwho-intro-sub">Non importa quanti anni ha il tuo cane o da quanto tempo lo hai:<br>non è mai troppo tardi per migliorare la relazione.</p>
+      <p class="forwho-intro-lead">Se ti senti così, sei nel posto giusto:</p>
+    </div>
+    <div class="forwho-grid">
+      <div class="forwho-item">
+        <div class="forwho-number">01</div>
+        <p>Il tuo cane <strong>"fa cose"</strong> che non capisci</p>
+      </div>
+      <div class="forwho-item">
+        <div class="forwho-number">02</div>
+        <p>Ti dicono di correggere, ma qualcosa <strong>non ti torna</strong></p>
+      </div>
+      <div class="forwho-item">
+        <div class="forwho-number">03</div>
+        <p>Hai provato consigli diversi e ti senti <strong>confusa</strong></p>
+      </div>
+      <div class="forwho-item">
+        <div class="forwho-number">04</div>
+        <p>Osservi il cane, ma <strong>non sai cosa guardare</strong> davvero</p>
+      </div>
+    </div>
+    <div class="forwho-reveal">
+      <div class="forwho-reveal-line"></div>
+      <div class="forwho-reveal-content">
+        <p class="forwho-reveal-arrow">👉 Il problema non è il cane.</p>
+        <p class="forwho-reveal-arrow">👉 Il problema è la mancanza di <strong>chiavi di lettura.</strong></p>
+      </div>
+      <div class="forwho-reveal-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Scegli il tuo percorso</div>
+  <h2 class="section-title">Tre percorsi.<br><em>Tre livelli di profondità.</em></h2>
+  <p class="section-desc">Trova quello che rispecchia il tuo obiettivo con il tuo cane e inizia al tuo ritmo.</p>
+
+  <div style="display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:48px;">
+    <span style="font-size:0.82rem; color:var(--text-mid); font-weight:500;">Mensile</span>
+    <div class="toggle-wrap" onclick="switchBilling()">
+      <div class="toggle-track" id="toggleTrack">
+        <div class="toggle-thumb" id="toggleThumb"></div>
+      </div>
+    </div>
+    <span style="font-size:0.82rem; color:var(--text-mid); font-weight:500;">Annuale</span>
+    <span class="annual-tag" id="annualTag">Risparmia fino al 10%</span>
+  </div>
+
+  <div class="pricing-grid">
+
+    <!-- CHIHUAHUA -->
+    <div class="pricing-card">
+      <div class="pricing-name">🐕‍🦺 Chihuahua</div>
+      <p class="pricing-desc">Il primo passo. Inizia con le basi, al tuo ritmo, con supporto diretto.</p>
+      <div class="pricing-price" id="priceChihuahua"><sup>€</sup>39</div>
+      <p class="pricing-period" id="periodChihuahua">al mese</p>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li class="pricing-feature"><span class="feature-check">✓</span> 2 lezioni video al mese</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> PDF guide scaricabili</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Supporto diretto via email</li>
+      </ul>
+      <button class="pricing-btn">Inizia qui →</button>
+    </div>
+
+    <!-- BORDER COLLIE -->
+    <div class="pricing-card featured">
+      <div class="pricing-badge">⭐ Più popolare</div>
+      <div class="pricing-name">🐕 Border Collie</div>
+      <p class="pricing-desc">Il percorso bilanciato. Lezioni, guide live e una comunità per crescere insieme.</p>
+      <div class="pricing-price" id="priceBorder"><sup>€</sup>89</div>
+      <p class="pricing-period" id="periodBorder">al mese</p>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li class="pricing-feature"><span class="feature-check">✓</span> 2 lezioni video al mese</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> PDF guide scaricabili</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Supporto diretto via email</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> 2 live guide interattive</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Esercizi pratici settimana per settimana</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Gruppo Telegram dedicato</li>
+      </ul>
+      <button class="pricing-btn">Entra nel Club →</button>
+    </div>
+
+    <!-- ALANO -->
+    <div class="pricing-card alano-card">
+      <div class="pricing-badge alano-badge">👑 Esperienza Esclusiva</div>
+      <div class="pricing-name">🦮 Alano</div>
+      <p class="pricing-desc">A numero chiuso, su candidatura. Funziona come una vera classe: piccolo gruppo, attenzione massima.</p>
+      <div class="pricing-price" id="priceAlano"><sup>€</sup>127</div>
+      <p class="pricing-period" id="periodAlano">al mese · max 20 persone</p>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li class="pricing-feature"><span class="feature-check">✓</span> 2 lezioni video al mese</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> PDF guide scaricabili</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Supporto diretto via email</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> 3 live guide con interazione diretta</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Gruppo Telegram dedicato</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Community esclusiva</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Collaborazioni con esperti del settore</li>
+        <li class="pricing-feature"><span class="feature-check">✓</span> Accesso su candidatura</li>
+      </ul>
+      <button class="pricing-btn alano-btn" onclick="document.getElementById('candidatura-modal').style.display='flex'">Chiedi l'Accesso →</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODAL CANDIDATURA -->
+<div id="candidatura-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--cream); border-radius:24px; padding:44px 36px; max-width:480px; width:100%; position:relative; text-align:center;">
+    <button onclick="document.getElementById('candidatura-modal').style.display='none'" style="position:absolute; top:16px; right:20px; background:none; border:none; font-size:1.4rem; color:var(--text-light); cursor:pointer;">✕</button>
+    <div style="font-size:2.5rem; margin-bottom:12px;">🦮</div>
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--brown-dark); margin-bottom:8px;">Chiedi l'accesso ad Alano</h3>
+    <p style="font-size:0.85rem; color:var(--text-mid); line-height:1.7; margin-bottom:24px; font-weight:300;">Il percorso Alano accoglie un massimo di 20 persone alla volta. Lascia la tua email e ti contatteremo per valutare la tua candidatura.</p>
+    <input type="email" placeholder="La tua email" style="width:100%; padding:14px 20px; border-radius:12px; border:1px solid rgba(107,68,48,0.2); font-family:'DM Sans',sans-serif; font-size:0.88rem; background:white; outline:none; margin-bottom:12px; box-sizing:border-box;" onfocus="this.style.borderColor='var(--rose)'" onblur="this.style.borderColor='rgba(107,68,48,0.2)'">
+    <button style="width:100%; padding:14px; border-radius:50px; background:var(--brown-dark); color:var(--cream); border:none; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; cursor:pointer;" onmouseover="this.style.background='var(--brown-mid)'" onmouseout="this.style.background='var(--brown-dark)'">Invia Candidatura</button>
+    <p style="font-size:0.72rem; color:var(--text-light); margin-top:14px;">Nessun impegno. Ti risponderemo entro 48 ore.</p>
+  </div>
+</div>
+
+<!-- TESTIMONIANZE -->
+<section class="testimonials" id="testimonials">
+  <div class="section-label">Testimonianze</div>
+  <h2 class="section-title">Persone reali.<br><em>Risultati reali.</em></h2>
+  <p class="section-desc">Questi sono alcuni dei risultati ottenuti da persone che hanno scelto un percorso online per migliorare il rapporto con il proprio cane.</p>
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Prima del percorso non capivo perché il mio cane abbaiasse così tanto. Ora riconosco i segnali e so come rispondergli. È cambiato tutto in poche settimane."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar av-rose">ML</div>
+        <div class="testimonial-info">
+          <h5>Maria Laura</h5>
+          <span>Proprietaria di Rex, 3 anni</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Ho provato tanti consigli diversi e niente funzionava. Con questo approccio ho finalmente capito il perché dei comportamenti di Buddy. Non è stata una questione di forza, ma di comprensione."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar av-sage">GS</div>
+        <div class="testimonial-info">
+          <h5>Giada S.</h5>
+          <span>Proprietaria di Buddy, 5 anni</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"La mia cane aveva una paura enorme degli altri cani. Grazie al percorso ho imparato come accompagnarla passo dopo passo. Adesso cammina tranquilla al parco. Non ci credevo."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar av-brown">ES</div>
+        <div class="testimonial-info">
+          <h5>Elena S.</h5>
+          <span>Proprietaria di Luna, 1 anno</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<div class="faq-section" id="faq">
+  <div style="text-align:center;">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Hai ancora <em>dei dubbi?</em></h2>
+    <p class="section-desc">Ecco le risposte alle domande più frequenti.</p>
+  </div>
+  <div class="faq">
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Devo avere un cane di una certa età? <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"><p>No, il metodo funziona per cani di qualsiasi età, dai cuccioli ai cani anziani. Ogni modulo ha indicazioni specifiche per le diverse fasce d'età.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Posso accedere ai corsi quando mi conviene? <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"><p>Assolutamente sì. Tutti i corsi sono pre-registrati e accessibili 24/7. Puoi procedere al tuo ritmo, senza pressioni o scadenze.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Cosa succede se cancello l'abbonamento? <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"><p>Puoi cancellare in qualsiasi momento dalla tua area cliente. Avrai accesso fino alla fine del periodo già pagato. Niente penalità, nessuna procedura complicata.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Il metodo sostituisce un addestratore in persona? <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"><p>Il percorso online è pensato per la grande maggioranza delle situazioni quotidiane e in molti casi è sufficiente da solo. Per casi più specifici, puoi sempre contattarmi direttamente: potrebbe essere che quello che serve sia semplicemente un percorso 1:1 con me, e questo è qualcosa che possiamo valutare insieme.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Quanto dura il Dog Communication Club? <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"><p>Il Dog Communication Club non ha scadenza. Finché il tuo abbonamento è attivo hai sempre accesso a tutti i contenuti, le guide e i materiali. Niente limite di tempo, niente fretta.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Non ho molta dimestichezza con la tecnologia, è complicato? <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"><p>No, è semplicissimo. Non devi installare nulla. Ti serve solo un dispositivo — computer, tablet o smartphone — e una connessione a internet. La piattaforma è intuitiva e se hai bisogno sono sempre qui per aiutarti.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Posso pagare a rate? <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"><p>I percorsi mensili funzionano già essenzialmente come una rata: paghi ogni mese e puoi fermarti quando vuoi, senza impegni a lungo termine.</p></div>
+    </div>
+
+    <!-- CONTATTO -->
+    <div class="faq-contact">
+      <h4>Non hai trovato la risposta che cercavi?</h4>
+      <p>Se hai ancora dei dubbi o vuoi capire quale percorso è più adatto a te e al tuo cane, scrivimi.<br>Ti rispondo personalmente — nessuna domanda è banale.</p>
+      
+      <form id="contactForm" class="contact-form" onsubmit="handleContactSubmit(event)">
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="La tua email" 
+          required
+          class="contact-input"
+        >
+        <textarea 
+          name="message" 
+          placeholder="Il tuo messaggio o domanda..." 
+          rows="4" 
+          required
+          class="contact-textarea"
+        ></textarea>
+        <button type="submit" class="contact-btn" id="contactBtn">
+          <span id="btnText">Invia Messaggio</span>
+          <span id="btnLoading" style="display:none;">Invio in corso...</span>
+        </button>
+        <p id="contactSuccess" class="contact-success" style="display:none;">
+          ✓ Messaggio inviato! Ti risponderò il prima possibile.
+        </p>
+        <p id="contactError" class="contact-error" style="display:none;">
+          Si è verificato un errore. Scrivimi direttamente a: chiaracapotortodogtrainer@gmail.com
+        </p>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- CTA FINALE -->
+<section class="cta-final">
+  <h2>Sei pronta a iniziare a <em>comprendere il tuo cane?</em></h2>
+  <p>Inizia oggi il tuo percorso nel Dog Communication Club. Il rapporto migliore è quello che puoi ancora costruire.</p>
+  <a href="#pricing">Scopri i Percorsi</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Dog Communication <span>Club</span></div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Condizioni di Vendita</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#1d7e75747c6f7c7e7c6d7269726f697279727a696f7c7473786f5d7a707c7471337e7270">Contatti</a></li>
+  </ul>
+  <p>© 2026 Dog Communication Club. Tutti i diritti riservati.</p>
+</footer>
+
+<!-- JS -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+let isAnnual = false;
+const prices = {
+  chihuahua: { monthly: '39',  annual: '447' },
+  border:    { monthly: '89',  annual: '1067' },
+  alano:     { monthly: '127', annual: '1369' }
+};
+function switchBilling() {
+  isAnnual = !isAnnual;
+  document.getElementById('toggleTrack').classList.toggle('active', isAnnual);
+  document.getElementById('toggleThumb').classList.toggle('active', isAnnual);
+  document.getElementById('annualTag').classList.toggle('visible', isAnnual);
+  document.getElementById('priceChihuahua').innerHTML = '<sup>€</sup>' + (isAnnual ? prices.chihuahua.annual : prices.chihuahua.monthly);
+  document.getElementById('priceBorder').innerHTML    = '<sup>€</sup>' + (isAnnual ? prices.border.annual    : prices.border.monthly);
+  document.getElementById('priceAlano').innerHTML     = '<sup>€</sup>' + (isAnnual ? prices.alano.annual     : prices.alano.monthly);
+  document.get  document.getElementById('periodChihuahua').textContent = isAnnual ? "all'anno" : 'al mese';
+  document.getElementById('periodBorder').textContent    = isAnnual ? "all'anno" : 'al mese';
+  document.getElementById('periodAlano').textContent     = isAnnual ? "all'anno · max 20 persone" : 'al mese · max 20 persone';
+}
+
+// ─── CONTACT FORM ───
+async function handleContactSubmit(e) {
+  e.preventDefault();
+  
+  const btn = document.getElementById('contactBtn');
+  const btnText = document.getElementById('btnText');
+  const btnLoading = document.getElementById('btnLoading');
+  const successMsg = document.getElementById('contactSuccess');
+  const errorMsg = document.getElementById('contactError');
+  const form = document.getElementById('contactForm');
+  
+  // Reset
+  successMsg.style.display = 'none';
+  errorMsg.style.display = 'none';
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  btnLoading.style.display = 'inline';
+  
+  const formData = new FormData(form);
+  
+  // ═══════════════════════════════════════════════════════════════
+  // OPZIONE A: Formspree (gratuito, semplice)
+  // 1. Vai su formspree.io
+  // 2. Registrati gratis con chiaracapotortodogtrainer@gmail.com
+  // 3. Crea un nuovo form
+  // 4. Sostituisci 'YOUR_FORM_ID' sotto con l'ID che ti danno
+  // ═══════════════════════════════════════════════════════════════
+  
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+  
+  // ═══════════════════════════════════════════════════════════════
+  // OPZIONE B: Web3Forms (alternativa gratuita)
+  // 1. Vai su web3forms.com
+  // 2. Inserisci chiaracapotortodogtrainer@gmail.com per ottenere Access Key
+  // 3. Aggiungi questo al form HTML sopra (dopo <form>):
+  //    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY">
+  // 4. Poi usa questo endpoint:
+  // const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+  // ═══════════════════════════════════════════════════════════════
+  
+  try {
+    const response = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+    
+    if (response.ok) {
+      successMsg.style.display = 'block';
+      form.reset();
+    } else {
+      throw new Error('Submission failed');
+    }
+  } catch (error) {
+    errorMsg.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btnText.style.display = 'inline';
+    btnLoading.style.display = 'none';
+  }
+}
+</script>
+
+</body>
+</html>

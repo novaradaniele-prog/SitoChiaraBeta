@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prenota Coaching 1:1 - Dog Communication Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-dark: #5C3D2E;
+    --brown-mid: #7E5A45;
+    --brown-warm: #A0714F;
+    --cream: #F5EDE4;
+    --cream-light: #FAF7F3;
+    --rose: #D4A0A0;
+    --rose-light: #F0D5D5;
+    --rose-dark: #B87878;
+    --sage: #8FA87A;
+    --sage-light: #C5D9B0;
+    --sage-dark: #5F7A4A;
+    --text-dark: #4A2E1F;
+    --text-mid: #7E5A45;
+    --text-light: #A08570;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: var(--brown-dark);
+    padding: 24px 40px;
+    text-align: center;
+    border-bottom: 1px solid rgba(212,160,160,0.2);
+  }
+  .header-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .header-logo span { color: var(--rose); }
+  .header-subtitle {
+    color: rgba(245,237,228,0.7);
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+
+  /* ─── MAIN CONTAINER ─── */
+  .booking-container {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  @media (max-width: 968px) {
+    .booking-container {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+  }
+
+  /* ─── INFO PANEL ─── */
+  .info-panel {
+    background: white;
+    border-radius: 24px;
+    padding: 36px 32px;
+    border: 1px solid rgba(107,68,48,0.08);
+    box-shadow: 0 4px 24px rgba(92,61,46,0.06);
+    position: sticky;
+    top: 20px;
+  }
+
+  .coach-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose-light), var(--sage-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--brown-dark);
+    margin: 0 auto 20px;
+    border: 3px solid var(--cream);
+    box-shadow: 0 4px 16px rgba(212,160,160,0.2);
+  }
+
+  .session-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .session-type {
+    display: inline-block;
+    background: var(--rose-light);
+    color: var(--brown-dark);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0 auto 24px;
+    display: block;
+    width: fit-content;
+  }
+
+  .session-details {
+    border-top: 1px solid var(--cream);
+    padding-top: 24px;
+    margin-top: 24px;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: var(--text-mid);
+    font-size: 0.9rem;
+  }
+
+  .detail-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--cream-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--brown-warm);
+  }
+
+  .session-description {
+    background: var(--cream-light);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 24px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+    border: 1px solid rgba(107,68,48,0.06);
+  }
+
+  /* ─── BOOKING PANEL ─── */
+  .booking-panel {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    border: 1px solid rgba(107,68,48,0.08);
+    box-shadow: 0 4px 24px rgba(92,61,46,0.06);
+  }
+
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+
+  .step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: all 0.3s;
+  }
+
+  .step.active {
+    color: var(--brown-dark);
+  }
+
+  .step.active .step-number {
+    background: var(--rose);
+    color: white;
+  }
+
+  .step.completed .step-number {
+    background: var(--sage);
+    color: white;
+  }
+
+  .step-arrow {
+    color: var(--cream);
+    font-size: 1.2rem;
+  }
+
+  /* ─── CALENDAR ─── */
+  .calendar-section {
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+  }
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .calendar-month {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .calendar-nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .calendar-nav button {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--cream);
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brown-mid);
+    transition: all 0.2s;
+    font-size: 1.1rem;
+  }
+
+  .calendar-nav button:hover {
+    background: var(--cream-light);
+    border-color: var(--rose-light);
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .calendar-day-header {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 0;
+  }
+
+  .calendar-day {
+    aspect-ratio: 1;
+    border: 1px solid var(--cream);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    color: var(--text-dark);
+    position: relative;
+  }
+
+  .calendar-day:hover:not(.disabled):not(.past) {
+    background: var(--cream-light);
+    border-color: var(--rose-light);
+    transform: scale(1.05);
+  }
+
+  .calendar-day.selected {
+    background: var(--rose);
+    color: white;
+    border-color: var(--rose);
+    font-weight: 600;
+  }
+
+  .calendar-day.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background: var(--cream);
+  }
+
+  .calendar-day.past {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .calendar-day.today {
+    border-color: var(--sage);
+    font-weight: 600;
+  }
+
+  .calendar-day.has-slots::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--sage);
+    border-radius: 50%;
+  }
+
+  /* ─── TIME SLOTS ─── */
+  .time-section {
+    animation: fadeIn 0.5s ease;
+  }
+
+  .selected-date-display {
+    background: var(--cream-light);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(107,68,48,0.06);
+  }
+
+  .selected-date-text {
+    font-weight: 600;
+    color: var(--brown-dark);
+  }
+
+  .change-date {
+    background: none;
+    border: none;
+    color: var(--rose-dark);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .time-zone {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+
+  .time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+
+  .time-slots-grid::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .time-slots-grid::-webkit-scrollbar-track {
+    background: var(--cream);
+    border-radius: 10px;
+  }
+
+  .time-slots-grid::-webkit-scrollbar-thumb {
+    background: var(--rose-light);
+    border-radius: 10px;
+  }
+
+  .time-slot {
+    padding: 12px 16px;
+    border: 1px solid var(--cream);
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-dark);
+  }
+
+  .time-slot:hover {
+    background: var(--cream-light);
+    border-color: var(--rose-light);
+    transform: translateY(-2px);
+  }
+
+  .time-slot.selected {
+    background: var(--rose);
+    color: white;
+    border-color: var(--rose);
+  }
+
+  .time-slot.booked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .no-slots-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+  }
+
+  /* ─── FORM ─── */
+  .form-section {
+    animation: fadeIn 0.5s ease;
+  }
+
+  .booking-summary {
+    background: var(--cream-light);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 28px;
+    border: 1px solid rgba(107,68,48,0.06);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+
+  .summary-label {
+    color: var(--text-light);
+  }
+
+  .summary-value {
+    color: var(--brown-dark);
+    font-weight: 600;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--cream);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    transition: all 0.2s;
+    background: white;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(212,160,160,0.1);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .form-hint {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 6px;
+  }
+
+  /* ─── BUTTONS ─── */
+  .button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 16px 28px;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background: var(--rose);
+    color: white;
+    box-shadow: 0 4px 16px rgba(212,160,160,0.25);
+  }
+
+  .btn-primary:hover {
+    background: var(--rose-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,160,160,0.35);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    background: var(--cream);
+    color: var(--brown-dark);
+  }
+
+  .btn-secondary:hover {
+    background: var(--cream-light);
+  }
+
+  /* ─── CONFIRMATION ─── */
+  .confirmation-section {
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .confirmation-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--sage), var(--sage-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    margin: 0 auto 24px;
+    animation: scaleIn 0.5s ease;
+  }
+
+  @keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+  }
+
+  .confirmation-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 12px;
+  }
+
+  .confirmation-subtitle {
+    color: var(--text-mid);
+    font-size: 1.05rem;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .confirmation-details {
+    background: var(--cream-light);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 0 auto 32px;
+    max-width: 500px;
+    text-align: left;
+    border: 1px solid rgba(107,68,48,0.06);
+  }
+
+  .confirmation-row {
+    display: flex;
+    align-items: start;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--cream);
+  }
+
+  .confirmation-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .confirmation-icon-small {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--brown-warm);
+    flex-shrink: 0;
+  }
+
+  .confirmation-info {
+    flex: 1;
+  }
+
+  .confirmation-label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .confirmation-value {
+    font-size: 1rem;
+    color: var(--brown-dark);
+    font-weight: 600;
+  }
+
+  .calendar-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .calendar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+  }
+
+  .calendar-btn-google {
+    background: white;
+    color: #4285F4;
+    border: 2px solid #4285F4;
+  }
+
+  .calendar-btn-google:hover {
+    background: #4285F4;
+    color: white;
+  }
+
+  .calendar-btn-outlook {
+    background: white;
+    color: #0078D4;
+    border: 2px solid #0078D4;
+  }
+
+  .calendar-btn-outlook:hover {
+    background: #0078D4;
+    color: white;
+  }
+
+  .back-home {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--rose-dark);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .back-home:hover {
+    text-decoration: underline;
+  }
+
+  /* ─── HIDDEN ─── */
+  .hidden {
+    display: none !important;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .booking-container {
+      margin: 30px auto;
+    }
+
+    .booking-panel {
+      padding: 28px 20px;
+    }
+
+    .info-panel {
+      position: static;
+    }
+
+    .step-indicator {
+      overflow-x: auto;
+    }
+
+    .time-slots-grid {
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    }
+
+    .button-group {
+      flex-direction: column;
+    }
+
+    .calendar-buttons {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">Dog Communication <span>Club</span></div>
+  <div class="header-subtitle">Prenota la tua sessione di coaching personale</div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="booking-container">
+  
+  <!-- INFO PANEL -->
+  <div class="info-panel">
+    <div class="coach-avatar">🐾</div>
+    <h1 class="session-title">Coaching 1:1</h1>
+    <span class="session-type">Sessione Individuale</span>
+    
+    <div class="session-details">
+      <div class="detail-item">
+        <div class="detail-icon">⏱️</div>
+        <div>60 minuti</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">💻</div>
+        <div>Videochiamata (Google Meet)</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">🌍</div>
+        <div>Fuso orario: Europe/Rome</div>
+      </div>
+    </div>
+
+    <div class="session-description">
+      Una sessione individuale dedicata completamente a te e al tuo cane. Affronteremo insieme le sfide specifiche che stai vivendo e costruiremo un piano d'azione personalizzato per migliorare la vostra comunicazione.
+    </div>
+  </div>
+
+  <!-- BOOKING PANEL -->
+  <div class="booking-panel">
+    
+    <!-- STEP INDICATOR -->
+    <div class="step-indicator">
+      <div class="step active" id="step1">
+        <span class="step-number">1</span>
+        <span>Data</span>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="step" id="step2">
+        <span class="step-number">2</span>
+        <span>Orario</span>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="step" id="step3">
+        <span class="step-number">3</span>
+        <span>Dettagli</span>
+      </div>
+    </div>
+
+    <!-- CALENDAR SECTION -->
+    <div class="calendar-section" id="calendarSection">
+      <h2 class="section-title">Seleziona una data</h2>
+      <p class="section-subtitle">Scegli il giorno che preferisci per la tua sessione</p>
+      
+      <div class="calendar-header">
+        <div class="calendar-month" id="calendarMonth">Febbraio 2026</div>
+        <div class="calendar-nav">
+          <button id="prevMonth" aria-label="Mese precedente">←</button>
+          <button id="nextMonth" aria-label="Mese successivo">→</button>
+        </div>
+      </div>
+
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- Days will be generated by JS -->
+      </div>
+    </div>
+
+    <!-- TIME SECTION -->
+    <div class="time-section hidden" id="timeSection">
+      <h2 class="section-title">Scegli l'orario</h2>
+      <p class="section-subtitle">Seleziona l'orario più comodo per te</p>
+      
+      <div class="selected-date-display">
+        <span class="selected-date-text" id="selectedDateText">Martedì, 10 Febbraio 2026</span>
+        <button class="change-date" id="changeDate">Cambia data</button>
+      </div>
+
+      <div class="time-zone">🌍 Fuso orario: Europe/Rome (GMT+1)</div>
+
+      <div class="time-slots-grid" id="timeSlotsGrid">
+        <!-- Time slots will be generated by JS -->
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-secondary" id="backToCalendar">← Indietro</button>
+        <button class="btn btn-primary" id="continueToForm" disabled>Continua</button>
+      </div>
+    </div>
+
+    <!-- FORM SECTION -->
+    <div class="form-section hidden" id="formSection">
+      <h2 class="section-title">I tuoi dettagli</h2>
+      <p class="section-subtitle">Completa le informazioni per confermare la prenotazione</p>
+
+      <div class="booking-summary" id="bookingSummary">
+        <div class="summary-row">
+          <span class="summary-label">Data</span>
+          <span class="summary-value" id="summaryDate">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Orario</span>
+          <span class="summary-value" id="summaryTime">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Durata</span>
+          <span class="summary-value">60 minuti</span>
+        </div>
+      </div>
+
+      <form id="bookingForm">
+        <div class="form-group">
+          <label class="form-label" for="name">Nome e Cognome *</label>
+          <input type="text" id="name" class="form-input" required placeholder="Il tuo nome completo">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email *</label>
+          <input type="email" id="email" class="form-input" required placeholder="la-tua@email.com">
+          <div class="form-hint">Riceverai la conferma e il link per la videochiamata a questo indirizzo</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phone">Telefono</label>
+          <input type="tel" id="phone" class="form-input" placeholder="+39 123 456 7890">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="dogName">Nome del tuo cane</label>
+          <input type="text" id="dogName" class="form-input" placeholder="Es. Luna">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="notes">Note o domande specifiche</label>
+          <textarea id="notes" class="form-textarea" placeholder="Raccontami brevemente cosa vorresti affrontare durante la sessione..."></textarea>
+          <div class="form-hint">Facoltativo, ma aiuta a preparare al meglio l'incontro</div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-secondary" id="backToTime">← Indietro</button>
+          <button type="submit" class="btn btn-primary" id="confirmBooking">Conferma Prenotazione</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CONFIRMATION SECTION -->
+    <div class="confirmation-section hidden" id="confirmationSection">
+      <div class="confirmation-icon">✓</div>
+      <h2 class="confirmation-title">Prenotazione Confermata!</h2>
+      <p class="confirmation-subtitle">
+        La tua sessione di coaching è stata prenotata con successo.<br>
+        Ti abbiamo inviato una email di conferma con tutti i dettagli.
+      </p>
+
+      <div class="confirmation-details" id="confirmationDetails">
+        <!-- Details will be inserted by JS -->
+      </div>
+
+      <div class="calendar-buttons">
+        <a href="#" class="calendar-btn calendar-btn-google" id="addToGoogleCal">
+          <span>📅</span>
+          Aggiungi a Google Calendar
+        </a>
+        <a href="#" class="calendar-btn calendar-btn-outlook" id="addToOutlookCal">
+          <span>📅</span>
+          Aggiungi a Outlook
+        </a>
+      </div>
+
+      <a href="/" class="back-home">← Torna alla home</a>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// BOOKING APP STATE
+// ═══════════════════════════════════════════════════════════════
+
+const state = {
+  currentMonth: new Date(2026, 1), // February 2026
+  selectedDate: null,
+  selectedTime: null,
+  currentStep: 1,
+  
+  // Simulated available slots (in real app, fetch from backend)
+  // Format: { 'YYYY-MM-DD': ['09:00', '10:00', ...] }
+  availableSlots: {
+    '2026-02-10': ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
+    '2026-02-11': ['09:00', '10:00', '14:00', '15:00'],
+    '2026-02-12': ['10:00', '11:00', '14:00', '16:00', '17:00'],
+    '2026-02-13': ['09:00', '11:00', '14:00', '15:00', '16:00'],
+    '2026-02-14': ['10:00', '11:00', '15:00', '16:00'],
+    '2026-02-17': ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00'],
+    '2026-02-18': ['09:00', '10:00', '14:00', '15:00', '16:00'],
+    '2026-02-19': ['10:00', '11:00', '14:00', '15:00', '17:00'],
+    '2026-02-20': ['09:00', '10:00', '11:00', '16:00', '17:00'],
+    '2026-02-24': ['09:00', '10:00', '14:00', '15:00', '16:00'],
+    '2026-02-25': ['10:00', '11:00', '14:00', '16:00', '17:00'],
+    '2026-02-26': ['09:00', '11:00', '14:00', '15:00', '16:00'],
+    '2026-02-27': ['10:00', '11:00', '15:00', '16:00', '17:00'],
+  },
+
+  // Simulated booked slots (in real app, fetch from backend)
+  bookedSlots: {
+    '2026-02-10': ['10:00', '15:00'],
+    '2026-02-11': ['09:00'],
+    '2026-02-17': ['11:00', '16:00'],
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// CALENDAR RENDERING
+// ═══════════════════════════════════════════════════════════════
+
+const monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 
+                     'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+const dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+
+function renderCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  const monthDisplay = document.getElementById('calendarMonth');
+  
+  const year = state.currentMonth.getFullYear();
+  const month = state.currentMonth.getMonth();
+  
+  monthDisplay.textContent = `${monthNames[month]} ${year}`;
+  
+  // Clear grid
+  grid.innerHTML = '';
+  
+  // Add day headers
+  dayNames.forEach(day => {
+    const header = document.createElement('div');
+    header.className = 'calendar-day-header';
+    header.textContent = day;
+    grid.appendChild(header);
+  });
+  
+  // Get first day of month and days in month
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  // Empty cells for days before month starts
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'calendar-day disabled';
+    grid.appendChild(empty);
+  }
+  
+  // Days of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const dateStr = formatDateISO(date);
+    const dayElement = document.createElement('div');
+    dayElement.className = 'calendar-day';
+    dayElement.textContent = day;
+    
+    // Check if past
+    if (date < today) {
+      dayElement.classList.add('past');
+    }
+    // Check if today
+    else if (date.getTime() === today.getTime()) {
+      dayElement.classList.add('today');
+    }
+    // Check if has available slots
+    else if (state.availableSlots[dateStr] && state.availableSlots[dateStr].length > 0) {
+      dayElement.classList.add('has-slots');
+      dayElement.addEventListener('click', () => selectDate(date));
+    } else {
+      dayElement.classList.add('disabled');
+    }
+    
+    // Check if selected
+    if (state.selectedDate && formatDateISO(state.selectedDate) === dateStr) {
+      dayElement.classList.add('selected');
+    }
+    
+    grid.appendChild(dayElement);
+  }
+}
+
+function selectDate(date) {
+  state.selectedDate = date;
+  state.selectedTime = null;
+  renderCalendar();
+  showTimeSlots();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TIME SLOTS
+// ═══════════════════════════════════════════════════════════════
+
+function showTimeSlots() {
+  const dateStr = formatDateISO(state.selectedDate);
+  const slots = state.availableSlots[dateStr] || [];
+  const booked = state.bookedSlots[dateStr] || [];
+  
+  const grid = document.getElementById('timeSlotsGrid');
+  const dateText = document.getElementById('selectedDateText');
+  
+  dateText.textContent = formatDateLong(state.selectedDate);
+  
+  grid.innerHTML = '';
+  
+  if (slots.length === 0) {
+    grid.innerHTML = '<div class="no-slots-message">Nessun orario disponibile per questa data</div>';
+  } else {
+    slots.forEach(time => {
+      const slot = document.createElement('div');
+      slot.className = 'time-slot';
+      slot.textContent = time;
+      
+      if (booked.includes(time)) {
+        slot.classList.add('booked');
+      } else {
+        slot.addEventListener('click', () => selectTime(time));
+      }
+      
+      if (state.selectedTime === time) {
+        slot.classList.add('selected');
+      }
+      
+      grid.appendChild(slot);
+    });
+  }
+  
+  goToStep(2);
+}
+
+function selectTime(time) {
+  state.selectedTime = time;
+  
+  // Update UI
+  document.querySelectorAll('.time-slot').forEach(slot => {
+    slot.classList.remove('selected');
+    if (slot.textContent === time) {
+      slot.classList.add('selected');
+    }
+  });
+  
+  document.getElementById('continueToForm').disabled = false;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+
+function goToStep(step) {
+  state.currentStep = step;
+  
+  // Hide all sections
+  document.getElementById('calendarSection').classList.add('hidden');
+  document.getElementById('timeSection').classList.add('hidden');
+  document.getElementById('formSection').classList.add('hidden');
+  document.getElementById('confirmationSection').classList.add('hidden');
+  
+  // Update step indicators
+  document.querySelectorAll('.step').forEach((s, i) => {
+    s.classList.remove('active', 'completed');
+    if (i + 1 < step) s.classList.add('completed');
+    if (i + 1 === step) s.classList.add('active');
+  });
+  
+  // Show relevant section
+  if (step === 1) {
+    document.getElementById('calendarSection').classList.remove('hidden');
+  } else if (step === 2) {
+    document.getElementById('timeSection').classList.remove('hidden');
+  } else if (step === 3) {
+    document.getElementById('formSection').classList.remove('hidden');
+    updateBookingSummary();
+  } else if (step === 4) {
+    document.getElementById('confirmationSection').classList.remove('hidden');
+  }
+}
+
+function updateBookingSummary() {
+  document.getElementById('summaryDate').textContent = formatDateLong(state.selectedDate);
+  document.getElementById('summaryTime').textContent = state.selectedTime;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FORM SUBMISSION
+// ═══════════════════════════════════════════════════════════════
+
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const formData = {
+    name: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    dogName: document.getElementById('dogName').value,
+    notes: document.getElementById('notes').value,
+    date: formatDateISO(state.selectedDate),
+    time: state.selectedTime,
+    datetime: `${formatDateISO(state.selectedDate)} ${state.selectedTime}`
+  };
+  
+  // Disable submit button
+  const submitBtn = document.getElementById('confirmBooking');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Invio in corso...';
+  
+  try {
+    // ═══════════════════════════════════════════════════════════════
+    // TODO: INTEGRAZIONE BACKEND
+    // ═══════════════════════════════════════════════════════════════
+    // In un'applicazione reale, qui invieresti i dati al tuo backend:
+    //
+    // const response = await fetch('/api/bookings', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(formData)
+    // });
+    //
+    // if (!response.ok) throw new Error('Booking failed');
+    // const result = await response.json();
+    // ═══════════════════════════════════════════════════════════════
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Mark slot as booked
+    const dateStr = formatDateISO(state.selectedDate);
+    if (!state.bookedSlots[dateStr]) {
+      state.bookedSlots[dateStr] = [];
+    }
+    state.bookedSlots[dateStr].push(state.selectedTime);
+    
+    // Show confirmation
+    showConfirmation(formData);
+    
+  } catch (error) {
+    console.error('Booking error:', error);
+    alert('Si è verificato un errore durante la prenotazione. Riprova più tardi.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Conferma Prenotazione';
+  }
+});
+
+function showConfirmation(data) {
+  const details = document.getElementById('confirmationDetails');
+  
+  details.innerHTML = `
+    <div class="confirmation-row">
+      <div class="confirmation-icon-small">📅</div>
+      <div class="confirmation-info">
+        <div class="confirmation-label">Data e ora</div>
+        <div class="confirmation-value">${formatDateLong(state.selectedDate)} alle ${state.selectedTime}</div>
+      </div>
+    </div>
+    <div class="confirmation-row">
+      <div class="confirmation-icon-small">👤</div>
+      <div class="confirmation-info">
+        <div class="confirmation-label">Partecipante</div>
+        <div class="confirmation-value">${data.name}</div>
+      </div>
+    </div>
+    <div class="confirmation-row">
+      <div class="confirmation-icon-small">📧</div>
+      <div class="confirmation-info">
+        <div class="confirmation-label">Email di conferma inviata a</div>
+        <div class="confirmation-value">${data.email}</div>
+      </div>
+    </div>
+    <div class="confirmation-row">
+      <div class="confirmation-icon-small">💻</div>
+      <div class="confirmation-info">
+        <div class="confirmation-label">Dove</div>
+        <div class="confirmation-value">Google Meet (link nella email)</div>
+      </div>
+    </div>
+  `;
+  
+  // Setup calendar links
+  setupCalendarLinks(data);
+  
+  goToStep(4);
+}
+
+function setupCalendarLinks(data) {
+  const startDate = new Date(state.selectedDate);
+  const [hours, minutes] = state.selectedTime.split(':');
+  startDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  
+  const endDate = new Date(startDate);
+  endDate.setHours(startDate.getHours() + 1);
+  
+  const title = 'Coaching 1:1 - Dog Communication Club';
+  const description = `Sessione di coaching personale con Chiara.\n\nNote: ${data.notes || 'Nessuna nota'}`;
+  const location = 'Google Meet (link nella email)';
+  
+  // Google Calendar
+  const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${formatDateTimeISO(startDate)}/${formatDateTimeISO(endDate)}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}`;
+  document.getElementById('addToGoogleCal').href = googleUrl;
+  
+  // Outlook Calendar
+  const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(title)}&startdt=${startDate.toISOString()}&enddt=${endDate.toISOString()}&body=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}`;
+  document.getElementById('addToOutlookCal').href = outlookUrl;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EVENT LISTENERS
+// ═══════════════════════════════════════════════════════════════
+
+document.getElementById('prevMonth').addEventListener('click', () => {
+  state.currentMonth = new Date(state.currentMonth.getFullYear(), state.currentMonth.getMonth() - 1);
+  renderCalendar();
+});
+
+document.getElementById('nextMonth').addEventListener('click', () => {
+  state.currentMonth = new Date(state.currentMonth.getFullYear(), state.currentMonth.getMonth() + 1);
+  renderCalendar();
+});
+
+document.getElementById('changeDate').addEventListener('click', () => {
+  goToStep(1);
+});
+
+document.getElementById('backToCalendar').addEventListener('click', () => {
+  goToStep(1);
+});
+
+document.getElementById('continueToForm').addEventListener('click', () => {
+  goToStep(3);
+});
+
+document.getElementById('backToTime').addEventListener('click', () => {
+  goToStep(2);
+});
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITY FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+
+function formatDateISO(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function formatDateTimeISO(date) {
+  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+}
+
+function formatDateLong(date) {
+  const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+  const dayName = days[date.getDay()];
+  const day = date.getDate();
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+  return `${dayName}, ${day} ${month} ${year}`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════════
+
+renderCalendar();
+</script>
+
+</body>
+</html>

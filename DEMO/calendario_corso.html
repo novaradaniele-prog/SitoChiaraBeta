@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario Corsi - Dog Communication Club</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Palette Colori */
+      --brown-dark: #5C3D2E;
+      --brown-mid: #7E5A45;
+      --brown-warm: #A0714F;
+      --cream: #F5EDE4;
+      --cream-light: #FAF7F3;
+      --rose: #D4A0A0;
+      --rose-light: #F0D5D5;
+      --rose-dark: #B87878;
+      --sage: #8FA87A;
+      --sage-light: #C5D9B0;
+      --sage-dark: #5F7A4A;
+      --text-dark: #4A2E1F;
+      --text-mid: #7E5A45;
+      --text-light: #A08570;
+      --success: #7A9B6E;
+      --error: #C17A7A;
+      --warning: #D4B896;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--cream-light) 0%, var(--cream) 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HEADER DEL CALENDARIO
+       ═══════════════════════════════════════════════════════════ */
+    .calendar-header {
+      background: var(--brown-dark);
+      color: var(--cream-light);
+      padding: 60px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .calendar-header::before {
+      content: '🐾';
+      position: absolute;
+      top: -20px;
+      right: 10%;
+      font-size: 180px;
+      opacity: 0.05;
+    }
+
+    .calendar-month {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      color: var(--cream-light);
+      margin-bottom: 16px;
+    }
+
+    .calendar-month span {
+      color: var(--rose);
+      font-style: italic;
+    }
+
+    .calendar-theme {
+      font-size: 1.3rem;
+      color: var(--rose-light);
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .calendar-subtitle {
+      font-size: 1rem;
+      color: rgba(245, 237, 228, 0.7);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       LEGENDA
+       ═══════════════════════════════════════════════════════════ */
+    .legend-section {
+      max-width: 1200px;
+      margin: -40px auto 40px;
+      padding: 0 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .legend-container {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(92, 61, 46, 0.12);
+      border: 1px solid rgba(92, 61, 46, 0.08);
+    }
+
+    .legend-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--brown-dark);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--cream-light);
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.live { background: var(--rose-dark); }
+    .legend-dot.dispense { background: var(--sage); }
+    .legend-dot.esercizi { background: var(--brown-warm); }
+    .legend-dot.newsletter { background: var(--warning); }
+
+    .legend-label {
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    .legend-badge {
+      margin-left: auto;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 50px;
+      background: var(--rose-light);
+      color: var(--rose-dark);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .legend-badge.public {
+      background: var(--sage-light);
+      color: var(--sage-dark);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CALENDARIO
+       ═══════════════════════════════════════════════════════════ */
+    .calendar-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    .calendar-grid {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(92, 61, 46, 0.08);
+      border: 1px solid rgba(92, 61, 46, 0.06);
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .weekday {
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px;
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+    }
+
+    .day-cell {
+      background: var(--cream-light);
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 140px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .day-cell:hover {
+      border-color: var(--rose-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(212, 160, 160, 0.15);
+    }
+
+    .day-cell.empty {
+      background: transparent;
+    }
+
+    .day-cell.empty:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: transparent;
+    }
+
+    .day-number {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--brown-dark);
+      margin-bottom: 8px;
+    }
+
+    .day-cell.today .day-number {
+      background: var(--rose);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+
+    .events {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .event {
+      background: white;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      border-left: 4px solid;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .event:hover {
+      transform: translateX(2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .event.live {
+      border-color: var(--rose-dark);
+      background: linear-gradient(135deg, #fff 0%, rgba(212, 160, 160, 0.08) 100%);
+    }
+
+    .event.dispense {
+      border-color: var(--sage);
+      background: linear-gradient(135deg, #fff 0%, rgba(143, 168, 122, 0.08) 100%);
+    }
+
+    .event.esercizi {
+      border-color: var(--brown-warm);
+      background: linear-gradient(135deg, #fff 0%, rgba(160, 113, 79, 0.08) 100%);
+    }
+
+    .event.newsletter {
+      border-color: var(--warning);
+      background: linear-gradient(135deg, #fff 0%, rgba(212, 184, 150, 0.08) 100%);
+    }
+
+    .event-time {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .event-title {
+      color: var(--text-mid);
+      font-size: 0.75rem;
+    }
+
+    .event-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .event-badge.members {
+      background: var(--rose-light);
+      color: var(--rose-dark);
+    }
+
+    .event-badge.public {
+      background: var(--sage-light);
+      color: var(--sage-dark);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NEWSLETTER SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--rose-light) 0%, var(--cream-light) 100%);
+      padding: 60px 40px;
+      border-top: 1px solid rgba(92, 61, 46, 0.1);
+    }
+
+    .newsletter-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .newsletter-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--brown-dark);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .newsletter-title em {
+      font-style: italic;
+      color: var(--brown-warm);
+    }
+
+    .newsletter-subtitle {
+      color: var(--text-mid);
+      font-size: 1rem;
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+
+    .newsletter-cta {
+      display: inline-block;
+      padding: 16px 42px;
+      background: var(--rose);
+      color: var(--brown-dark);
+      text-decoration: none;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      box-shadow: 0 6px 25px rgba(212, 160, 160, 0.25);
+    }
+
+    .newsletter-cta:hover {
+      background: var(--rose-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 35px rgba(212, 160, 160, 0.35);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--brown-dark);
+      color: var(--cream-light);
+      padding: 60px 40px 0;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      padding-bottom: 50px;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--cream-light);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .footer-brand h3 span {
+      color: var(--rose);
+    }
+
+    .footer-tagline {
+      color: rgba(245, 237, 228, 0.7);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cream-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      background: rgba(245, 237, 228, 0.1);
+      border-radius: 50px;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .footer-social a:hover {
+      background: var(--rose);
+      color: var(--brown-dark);
+      transform: translateY(-2px);
+    }
+
+    .social-icon {
+      font-size: 1.2rem;
+    }
+
+    .footer-links h4,
+    .footer-legal h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--cream-light);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .footer-links ul,
+    .footer-legal ul {
+      list-style: none;
+    }
+
+    .footer-links li,
+    .footer-legal li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(245, 237, 228, 0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      font-weight: 400;
+    }
+
+    .footer-links a:hover {
+      color: var(--rose);
+      transform: translateX(4px);
+    }
+
+    .link-emoji {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .footer-legal a {
+      color: rgba(245, 237, 228, 0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: block;
+      transition: all 0.3s;
+      font-weight: 400;
+    }
+
+    .footer-legal a:hover {
+      color: var(--rose);
+      transform: translateX(4px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(245, 237, 228, 0.15);
+      padding: 24px 40px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .footer-bottom p {
+      color: rgba(245, 237, 228, 0.6);
+      font-size: 0.85rem;
+      font-weight: 300;
+    }
+
+    .footer-bottom a {
+      color: var(--rose);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--rose-light);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .days-grid {
+        gap: 8px;
+      }
+
+      .day-cell {
+        min-height: 120px;
+        padding: 10px;
+      }
+
+      .event {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .calendar-header {
+        padding: 40px 24px 60px;
+      }
+
+      .legend-section {
+        padding: 0 24px;
+        margin: -30px auto 30px;
+      }
+
+      .legend-container {
+        padding: 24px;
+      }
+
+      .legend-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-wrapper {
+        padding: 30px 24px 60px;
+      }
+
+      .calendar-grid {
+        padding: 24px 16px;
+      }
+
+      .weekday {
+        font-size: 0.7rem;
+        padding: 8px 4px;
+      }
+
+      .days-grid {
+        gap: 6px;
+      }
+
+      .day-cell {
+        min-height: 100px;
+        padding: 8px;
+      }
+
+      .day-number {
+        font-size: 0.95rem;
+      }
+
+      .event {
+        font-size: 0.7rem;
+        padding: 6px 8px;
+      }
+
+      .event-title {
+        font-size: 0.7rem;
+      }
+
+      .newsletter-section {
+        padding: 40px 24px;
+      }
+
+      .newsletter-cta {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .footer {
+        padding: 40px 24px 0;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer-social {
+        flex-wrap: wrap;
+      }
+
+      .footer-bottom {
+        padding: 20px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .weekday {
+        font-size: 0.65rem;
+      }
+
+      .day-cell {
+        min-height: 90px;
+        padding: 6px;
+      }
+
+      .event {
+        padding: 4px 6px;
+      }
+
+      .event-badge {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HEADER DEL CALENDARIO
+       ═══════════════════════════════════════════════════════════ -->
+  <header class="calendar-header">
+    <h1 class="calendar-month">Febbraio <span>2026</span></h1>
+    <p class="calendar-theme">🐕 Tema del Mese: Reattività nel Cane</p>
+    <p class="calendar-subtitle">
+      Impara a gestire l'iper-reattività con tecniche di comunicazione calma e consapevole
+    </p>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LEGENDA
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="legend-section">
+    <div class="legend-container">
+      <h2 class="legend-title">📅 Legenda Eventi</h2>
+      <div class="legend-grid">
+        <div class="legend-item">
+          <div class="legend-dot live"></div>
+          <span class="legend-label">Live Q&A</span>
+          <span class="legend-badge">Members</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot dispense"></div>
+          <span class="legend-label">Dispense</span>
+          <span class="legend-badge">Members</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot esercizi"></div>
+          <span class="legend-label">Esercizi</span>
+          <span class="legend-badge">Members</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot newsletter"></div>
+          <span class="legend-label">Newsletter</span>
+          <span class="legend-badge public">Tutti</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CALENDARIO
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="calendar-wrapper">
+    <div class="calendar-grid">
+      
+      <!-- Giorni della settimana -->
+      <div class="weekdays">
+        <div class="weekday">Lun</div>
+        <div class="weekday">Mar</div>
+        <div class="weekday">Mer</div>
+        <div class="weekday">Gio</div>
+        <div class="weekday">Ven</div>
+        <div class="weekday">Sab</div>
+        <div class="weekday">Dom</div>
+      </div>
+
+      <!-- Griglia giorni -->
+      <div class="days-grid">
+        
+        <!-- Settimana 1 (Sab 1 - Dom 2) -->
+        <div class="day-cell empty"></div>
+        <div class="day-cell empty"></div>
+        <div class="day-cell empty"></div>
+        <div class="day-cell empty"></div>
+        <div class="day-cell empty"></div>
+        
+        <div class="day-cell">
+          <div class="day-number">1</div>
+        </div>
+        
+        <div class="day-cell">
+          <div class="day-number">2</div>
+        </div>
+
+        <!-- Settimana 2 (Lun 3 - Dom 9) -->
+        <div class="day-cell">
+          <div class="day-number">3</div>
+          <div class="events">
+            <div class="event esercizi">
+              <div class="event-time">⏰ 09:00</div>
+              <div class="event-title">Esercizi pratici</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">4</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">5</div>
+          <div class="events">
+            <div class="event live">
+              <div class="event-time">🎥 12:00</div>
+              <div class="event-title">Live Q&A Reattività</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">6</div>
+          <div class="events">
+            <div class="event newsletter">
+              <div class="event-time">✉️ 11:00</div>
+              <div class="event-title">Newsletter Settimanale</div>
+              <span class="event-badge public">Tutti</span>
+            </div>
+            <div class="event dispense">
+              <div class="event-time">📚 19:00</div>
+              <div class="event-title">Dispensa: Trigger Analysis</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">7</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">8</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">9</div>
+        </div>
+
+        <!-- Settimana 3 (Lun 10 - Dom 16) -->
+        <div class="day-cell">
+          <div class="day-number">10</div>
+          <div class="events">
+            <div class="event esercizi">
+              <div class="event-time">⏰ 09:00</div>
+              <div class="event-title">Esercizi settimanali</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">11</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">12</div>
+          <div class="events">
+            <div class="event live">
+              <div class="event-time">🎥 12:00</div>
+              <div class="event-title">Live: Gestione Guinzaglio</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">13</div>
+          <div class="events">
+            <div class="event newsletter">
+              <div class="event-time">✉️ 11:00</div>
+              <div class="event-title">Newsletter Settimanale</div>
+              <span class="event-badge public">Tutti</span>
+            </div>
+            <div class="event dispense">
+              <div class="event-time">📚 19:00</div>
+              <div class="event-title">Dispensa: Body Language</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">14</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">15</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">16</div>
+        </div>
+
+        <!-- Settimana 4 (Lun 17 - Dom 23) -->
+        <div class="day-cell">
+          <div class="day-number">17</div>
+          <div class="events">
+            <div class="event esercizi">
+              <div class="event-time">⏰ 09:00</div>
+              <div class="event-title">Esercizi pratici</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">18</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">19</div>
+          <div class="events">
+            <div class="event live">
+              <div class="event-time">🎥 12:00</div>
+              <div class="event-title">Live: Casi Studio</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">20</div>
+          <div class="events">
+            <div class="event newsletter">
+              <div class="event-time">✉️ 11:00</div>
+              <div class="event-title">Newsletter Settimanale</div>
+              <span class="event-badge public">Tutti</span>
+            </div>
+            <div class="event dispense">
+              <div class="event-time">📚 19:00</div>
+              <div class="event-title">Dispensa: Desensibilizzazione</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">21</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">22</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">23</div>
+        </div>
+
+        <!-- Settimana 5 (Lun 24 - Dom 28/Mar 1) -->
+        <div class="day-cell">
+          <div class="day-number">24</div>
+          <div class="events">
+            <div class="event esercizi">
+              <div class="event-time">⏰ 09:00</div>
+              <div class="event-title">Esercizi finali</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">25</div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">26</div>
+          <div class="events">
+            <div class="event live">
+              <div class="event-time">🎥 12:00</div>
+              <div class="event-title">Live: Recap Mensile</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">27</div>
+          <div class="events">
+            <div class="event newsletter">
+              <div class="event-time">✉️ 11:00</div>
+              <div class="event-title">Newsletter Settimanale</div>
+              <span class="event-badge public">Tutti</span>
+            </div>
+            <div class="event dispense">
+              <div class="event-time">📚 19:00</div>
+              <div class="event-title">Checklist Progressi</div>
+              <span class="event-badge members">Members</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-cell">
+          <div class="day-number">28</div>
+        </div>
+
+        <div class="day-cell empty"></div>
+        <div class="day-cell empty"></div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       NEWSLETTER SECTION
+       ═══════════════════════════════════════════════════════════ -->
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <h2 class="newsletter-title">✉️ Ricevi <em>consigli settimanali</em></h2>
+      <p class="newsletter-subtitle">Iscriviti alla newsletter per tips esclusivi, nuove risorse e storie dalla community</p>
+      
+      <a href="newsletter_form_page.html" class="newsletter-cta">
+        Iscriviti alla Newsletter
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-content">
+      
+      <!-- COLONNA 1: BRAND + SOCIAL -->
+      <div class="footer-brand">
+        <h3>Dog Communication <span>Club</span></h3>
+        <p class="footer-tagline">
+          La prima scuola online di educazione cinofila.<br>
+          Comunicazione vera, senza urla, senza punizioni.
+        </p>
+        <div class="footer-social">
+          <a href="https://facebook.com" target="_blank">
+            <span class="social-icon">😎</span>
+            <span>Facebook</span>
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <span class="social-icon">📷</span>
+            <span>Instagram</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- COLONNA 2: LINK RAPIDI -->
+      <div class="footer-links">
+        <h4>Link Rapidi</h4>
+        <ul>
+          <li><a href="#hero"><span class="link-emoji">🏠</span> Home</a></li>
+          <li><a href="#learn"><span class="link-emoji">📚</span> Cosa impari</a></li>
+          <li><a href="#features"><span class="link-emoji">✨</span> Cosa trovi</a></li>
+          <li><a href="#pricing"><span class="link-emoji">💎</span> Percorsi</a></li>
+          <li><a href="#faq"><span class="link-emoji">❓</span> FAQ</a></li>
+          <li><a href="#contact"><span class="link-emoji">✉️</span> Contatti</a></li>
+        </ul>
+      </div>
+
+      <!-- COLONNA 3: LEGALE -->
+      <div class="footer-legal">
+        <h4>Informazioni Legali</h4>
+        <ul>
+          <li><a href="/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/cookie-policy">Cookie Policy</a></li>
+          <li><a href="/termini-condizioni">Termini e Condizioni</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="footer-bottom">
+      <p>
+        © <span id="currentYear">2026</span> Dog Communication Club. Tutti i diritti riservati. 
+        <br>
+        Made with 🐾 for dogs and humans
+      </p>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    // Anno dinamico
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Evidenzia giorno corrente (opzionale - puoi rimuoverlo o personalizzarlo)
+    // Per ora ho messo manualmente le classi nel template
+  </script>
+
+</body>
+</html>
